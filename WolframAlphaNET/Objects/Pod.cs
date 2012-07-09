@@ -22,6 +22,11 @@ namespace WolframAlphaNET.Objects
         public List<Sound> Sounds { get; set; }
         public Error Error { get; set; }
 
+        /// <summary>
+        /// Temporary link that have a lifetimes of about a half hour or so.
+        /// </summary>
+        public string Async { get; set; }
+
         public bool Equals(Pod other)
         {
             if (ReferenceEquals(null, other)) return false;

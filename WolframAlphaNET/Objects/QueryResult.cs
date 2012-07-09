@@ -26,11 +26,6 @@ namespace WolframAlphaNET.Objects
         public string Host { get; set; }
         public int Server { get; set; }
         public string Related { get; set; }
-
-        /// <summary>
-        /// Temporary link that have a lifetimes of about a half hour or so.
-        /// </summary>
-        public string Async { get; set; }
         public List<Pod> Pods { get; set; }
 
         /// <summary>
