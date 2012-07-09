@@ -1,8 +1,8 @@
-# Wolfram|Alpha.Net - A full implementaiton of the 2.0 API in C#
+# Wolfram|Alpha.Net - A full implementation of the 2.0 API in C#
 
 ### Features
 
-- Based on RestSharp (http://restsharp.org) to deserialize the WolframAlpha XML into objects
+- Based on RestSharp (http://restsharp.org) to deserialize the Wolfram|Alpha XML into objects
 - Handles Assumptions, different formats, warnings, tips, did you means, timings and more.
 
 ### Tutorial
@@ -20,29 +20,31 @@ First you need to get a Wolfram|Alpha AppID from their website.
 Here is the simplest form of getting data from Wolfram|Alpha:
 
 ```csharp
-//First create the main class:
-WolframAlpha wolfram = new WolframAlpha("APPID HERE");
-
-//Then you simply query Wolfram|Alpha like this:
-QueryResult results = wolfram.Query("Who is Danald Duck?");
-
-//The QueryResult object contains the parsed XML from Wolfram|Alpha. Lets look at it.
-//The results from wolfram is split into "pods". We just print them.
-
-if (results != null)
+static void Main(string[] args)
 {
-    foreach (Pod pod in results.Pods)
-    {
-        Console.WriteLine(pod.Title);
-        if (pod.SubPods != null)
-        {
-            foreach (SubPod subPod in pod.SubPods)
-            {
-                Console.WriteLine(subPod.Title);
-                Console.WriteLine(subPod.Plaintext);
-            }
-        }
-    }
+	//First create the main class:
+	WolframAlpha wolfram = new WolframAlpha("APPID HERE");
+
+	//Then you simply query Wolfram|Alpha like this:
+	QueryResult results = wolfram.Query("Who is Danald Duck?");
+
+	//The QueryResult object contains the parsed XML from Wolfram|Alpha. Lets look at it.
+	//The results from wolfram is split into "pods". We just print them.
+	if (results != null)
+	{
+		foreach (Pod pod in results.Pods)
+		{
+			Console.WriteLine(pod.Title);
+			if (pod.SubPods != null)
+			{
+				foreach (SubPod subPod in pod.SubPods)
+				{
+					Console.WriteLine(subPod.Title);
+					Console.WriteLine(subPod.Plaintext);
+				}
+			}
+		}
+	}
 }
 
 ```
