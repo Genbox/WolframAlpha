@@ -22,7 +22,7 @@ namespace RestSharpWolframAlpha
 
             //Here we output the Wolfram|Alpha results.
             if (results.Error != null)
-                Console.WriteLine("Woops, where was an error:" + results.Error.Msg);
+                Console.WriteLine("Woops, where was an error: " + results.Error.Msg);
 
             if (results.DidYouMeans.HasElements())
             {
