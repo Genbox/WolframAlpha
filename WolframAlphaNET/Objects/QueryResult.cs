@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RestSharp.Deserializers;
 using WolframAlphaNET.Objects.Errors;
 using WolframAlphaNET.Objects.Output;
 using WolframAlphaNET.Objects.Warnings;
@@ -40,8 +41,12 @@ namespace WolframAlphaNET.Objects
         public Warning Warnings { get; set; }
         public Generalization Generalization { get; set; }
         public List<Tip> Tips { get; set; }
-        public List<DidYouMean> DidYouMeans { get; set; }
-        public LanguageMessage LanguageMsg { get; set; }
+
+        [DeserializeAs(Name = "didyoumeans")]
+        public List<DidYouMean> DidYouMean { get; set; }
+
+        [DeserializeAs(Name = "languagemsg")]
+        public LanguageMessage LanguageMessage { get; set; }
         public FutureTopic FutureTopic { get; set; }
         public List<RelatedExample> RelatedExamples { get; set; }
         public ExamplePage ExamplePage { get; set; }

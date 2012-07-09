@@ -11,7 +11,10 @@ namespace WolframAlphaNET
     {
         public static Pod GetPrimaryPod(this QueryResult results)
         {
-            return results.Pods.FirstOrDefault(pod => pod.Primary);
+            if (results.Pods.HasElements())
+                return results.Pods.FirstOrDefault(pod => pod.Primary);
+
+            return null;
         }
 
         /// <summary>
@@ -19,6 +22,7 @@ namespace WolframAlphaNET
         /// only the timedout scanners return their result. This is especially useful in a multi-threaded environment.
         /// </summary>
         /// <param name="result">The new pods that have been calculated.</param>
+        /// <param name="includeInOriginal">When true, it will add the new pods to the original QueryResult</param>
         public static List<Pod> RecalculateResults(this QueryResult result, bool includeInOriginal = true)
         {
             if (!string.IsNullOrEmpty(result.Recalculate) && result.Timedout.Split(',').Length >= 1)

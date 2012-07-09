@@ -1,8 +1,12 @@
+using RestSharp.Deserializers;
+
 namespace WolframAlphaNET.Objects
 {
     public class FutureTopic
     {
         public string Topic { get; set; }
-        public string Msg { get; set; }
+
+        [DeserializeAs(Name = "msg")]
+        public string Message { get; set; }
     }
 }
