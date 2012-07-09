@@ -4,6 +4,7 @@ using System.Device.Location;
 using System.Globalization;
 using System.Net;
 using RestSharp;
+using RestSharp.Deserializers;
 using WolframAlphaNET.Objects;
 
 namespace WolframAlphaNET
@@ -215,12 +216,14 @@ namespace WolframAlphaNET
             request.AddParameter("appid", _appId);
             request.AddParameter("input", query);
 
-            RestResponse<ValidateQueryResult> response = (RestResponse<ValidateQueryResult>)_client.Execute<ValidateQueryResult>(request);
+            RestResponse response = (RestResponse)_client.Execute(request);
+            XmlAttributeDeserializer deserializer = new XmlAttributeDeserializer();
+            ValidateQueryResult results = deserializer.Deserialize<ValidateQueryResult>(response);
 
-            if (response.Data != null)
+            if (results != null)
             {
-                result = response.Data;
-                return !response.Data.Error && response.Data.Success;
+                result = results;
+                return !results.Error && results.Success;
             }
 
             result = null;
@@ -340,12 +343,14 @@ namespace WolframAlphaNET
             if (EnableTranslate.HasValue)
                 request.AddParameter("translation", EnableTranslate.ToString().ToLower());
 
-            RestResponse<QueryResult> response = (RestResponse<QueryResult>)_client.Execute<QueryResult>(request);
+            RestResponse response = (RestResponse)_client.Execute(request);
+            XmlAttributeDeserializer deserializer = new XmlAttributeDeserializer();
+            QueryResult results = deserializer.Deserialize<QueryResult>(response);
 
-            if (response.Data != null)
-                response.Data.RawResponse = response.Content;
+            if (results != null)
+                results.RawResponse = response.Content;
 
-            return response.Data;
+            return results;
         }
     }
 }
