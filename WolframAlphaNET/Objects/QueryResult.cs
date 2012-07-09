@@ -1,0 +1,67 @@
+using System.Collections.Generic;
+using WolframAlphaNET.Objects.Errors;
+using WolframAlphaNET.Objects.Output;
+using WolframAlphaNET.Objects.Warnings;
+
+namespace WolframAlphaNET.Objects
+{
+    public class QueryResult
+    {
+        public string RawResponse { get; set; }
+        public bool Success { get; set; }
+        public string Version { get; set; }
+        public string DataTypes { get; set; }
+        public float Timing { get; set; }
+        public string Timedout { get; set; }
+        public float ParseTiming { get; set; }
+        public bool ParseTimedout { get; set; }
+        public string TimedoutPods { get; set; }
+
+        /// <summary>
+        /// A link to calculate the pods that did not make it within the scan timeout.
+        /// </summary>
+        public string Recalculate { get; set; }
+        public string ID { get; set; }
+        public string Host { get; set; }
+        public int Server { get; set; }
+        public string Related { get; set; }
+
+        /// <summary>
+        /// Temporary link that have a lifetimes of about a half hour or so.
+        /// </summary>
+        public string Async { get; set; }
+        public List<Pod> Pods { get; set; }
+
+        /// <summary>
+        /// TODO: List assumption types
+        /// </summary>
+        public List<Assumption> Assumptions { get; set; }
+        public List<Source> Sources { get; set; }
+        public Warning Warnings { get; set; }
+        public Generalization Generalization { get; set; }
+        public List<Tip> Tips { get; set; }
+        public List<DidYouMean> DidYouMeans { get; set; }
+        public LanguageMessage LanguageMsg { get; set; }
+        public FutureTopic FutureTopic { get; set; }
+        public List<RelatedExample> RelatedExamples { get; set; }
+        public ExamplePage ExamplePage { get; set; }
+        public Error Error { get; set; }
+
+        /// <summary>
+        /// It will only appear if the requested result formats include html, and there will only be one. Its content is a CDATA section containing a series of <script> elements defining JavaScript functionality needed by the HTML in the <markup> elements. <scripts> has no attributes.
+        /// </summary>
+        public Script Scripts { get; set; }
+
+        /// <summary>
+        /// It will only appear if the requested result formats include html, and there will only be one. Its content is a CDATA section containing a series of <link> elements defining CSS files needed by the HTML in the <markup> elements. <css> has no attributes.
+        /// </summary>
+        public CSS CSS { get; set; }
+
+        //TODO: Test
+        /// <summary>
+        /// MathML elements enclose the Presentation MathML representation of a single subpod. They only appear if the requested result formats include mathml. <mathml> has no attributes.
+        /// </summary>
+        public MathML MathML { get; set; }
+
+    }
+}
