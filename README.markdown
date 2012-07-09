@@ -1,9 +1,9 @@
-# Wolfram|Alpha.Net - A full implementation of the 2.0 API in C#
+# Wolfram|Alpha.Net - A full implementation of the 2.0 API
 
 ### Features
 
-- Based on RestSharp (http://restsharp.org) to deserialize the Wolfram|Alpha XML into objects
-- Handles Assumptions, different formats, warnings, tips, did you means, timings and more.
+* Based on RestSharp (http://restsharp.org) to deserialize the Wolfram|Alpha XML into objects
+* Handles Assumptions, different formats, warnings, tips, did you means, timings and more.
 
 ### Tutorial
 
