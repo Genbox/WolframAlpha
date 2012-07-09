@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using WolframAlphaNET;
 using WolframAlphaNET.Objects;
 
@@ -6,12 +7,10 @@ namespace RestSharpWolframAlpha
 {
     public class Program
     {
-        private const string AppId = "INSERT YOUR APPID HERE";
-
         static void Main(string[] args)
         {
             //Create the Engine.
-            WolframAlpha wolfram = new WolframAlpha(AppId);
+            WolframAlpha wolfram = new WolframAlpha(ConfigurationManager.AppSettings["AppId"]);
             wolfram.ScanTimeout = 0.1f; //We set ScanTimeout really low to get a quick answer. See RecalculateResults() below.
 
             //We search for something. Notice that we spelled it wrong.

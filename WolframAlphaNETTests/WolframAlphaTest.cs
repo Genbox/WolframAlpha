@@ -1,4 +1,5 @@
-﻿using System.Device.Location;
+﻿using System.Configuration;
+using System.Device.Location;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolframAlphaNET;
@@ -10,12 +11,12 @@ namespace WolframAlphaNETTests
     [TestClass]
     public class WolframAlphaTest
     {
-        private const string AppId = "INSERT YOUR APPID HERE";
+        private string _appId = ConfigurationManager.AppSettings["AppId"];
 
         [TestMethod]
         public void WolframAlphaConstructorTest()
         {
-            WolframAlpha wolfram = new WolframAlpha(AppId);
+            WolframAlpha wolfram = new WolframAlpha(_appId);
             Assert.IsNotNull(wolfram.Assumptions);
             Assert.IsNotNull(wolfram.ExcludePodIDs);
             Assert.IsNotNull(wolfram.Formats);
@@ -28,7 +29,7 @@ namespace WolframAlphaNETTests
         [TestMethod]
         public void SearchTest()
         {
-            WolframAlpha wolframAlpha = new WolframAlpha(AppId);
+            WolframAlpha wolframAlpha = new WolframAlpha(_appId);
 
             const string expectedPIApproximation = "3.1415926535897932384626433832795028841971693993751058...";
 
@@ -44,7 +45,7 @@ namespace WolframAlphaNETTests
         [TestMethod]
         public void ValidateQueryTest()
         {
-            WolframAlpha wolframAlpha = new WolframAlpha(AppId);
+            WolframAlpha wolframAlpha = new WolframAlpha(_appId);
             //We put in a lot of parameters
             wolframAlpha.EnableTranslate = true;
             wolframAlpha.MaxWidth = 200;
@@ -78,7 +79,7 @@ namespace WolframAlphaNETTests
         public void EnableTranslateTest()
         {
             //First try without translation
-            WolframAlpha wolframAlpha = new WolframAlpha(AppId);
+            WolframAlpha wolframAlpha = new WolframAlpha(_appId);
             wolframAlpha.EnableTranslate = false;
             QueryResult negativeResults = wolframAlpha.Query("uno dos tres");
             Assert.IsNull(negativeResults.Warnings);
