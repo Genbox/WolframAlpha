@@ -25,7 +25,8 @@ static void Main(string[] args)
 	//First create the main class:
 	WolframAlpha wolfram = new WolframAlpha("APPID HERE");
 
-	//Then you simply query Wolfram|Alpha like this:
+	//Then you simply query Wolfram|Alpha like this
+	//Note that the spelling error will be correct by Wolfram|Alpha
 	QueryResult results = wolfram.Query("Who is Danald Duck?");
 
 	//The QueryResult object contains the parsed XML from Wolfram|Alpha. Lets look at it.
