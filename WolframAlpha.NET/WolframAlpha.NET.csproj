@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolframAlphaNET</RootNamespace>
-    <AssemblyName>WolframAlphaNET</AssemblyName>
+    <AssemblyName>WolframAlpha.NET</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Enums\Format.cs" />
     <Compile Include="Objects\Alternative.cs" />
     <Compile Include="Objects\Assumption.cs" />
     <Compile Include="Objects\DidYouMean.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Objects\Warnings\Warning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryResultHelper.cs" />
+    <Compile Include="Enums\Unit.cs" />
     <Compile Include="WolframAlpha.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

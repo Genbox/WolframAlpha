@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolframAlphaNETTests</RootNamespace>
-    <AssemblyName>WolframAlphaNETTests</AssemblyName>
+    <AssemblyName>WolframAlpha.NET Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -51,15 +51,15 @@
     <Compile Include="WolframAlphaTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WolframAlphaNET\WolframAlphaNET.csproj">
-      <Project>{A6C3A23B-C045-4589-A83A-62E5E153E18E}</Project>
-      <Name>WolframAlphaNET</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\WolframAlphaNETClient\App.config">
+    <None Include="..\WolframAlpha.NET Client\App.config">
       <Link>App.config</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WolframAlpha.NET\WolframAlpha.NET.csproj">
+      <Project>{A6C3A23B-C045-4589-A83A-62E5E153E18E}</Project>
+      <Name>WolframAlpha.NET</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

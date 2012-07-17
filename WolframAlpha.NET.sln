@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframAlphaNETClient", "WolframAlphaNETClient\WolframAlphaNETClient.csproj", "{18CE4266-6FEF-41DC-91E3-FF546633E2CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframAlpha.NET Client", "WolframAlpha.NET Client\WolframAlpha.NET Client.csproj", "{18CE4266-6FEF-41DC-91E3-FF546633E2CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframAlphaNET", "WolframAlphaNET\WolframAlphaNET.csproj", "{A6C3A23B-C045-4589-A83A-62E5E153E18E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframAlpha.NET", "WolframAlpha.NET\WolframAlpha.NET.csproj", "{A6C3A23B-C045-4589-A83A-62E5E153E18E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframAlphaNETTests", "WolframAlphaNETTests\WolframAlphaNETTests.csproj", "{B6711C8E-B8E1-46DB-BC2F-15A7B9E28C1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframAlpha.NET Tests", "WolframAlpha.NET Tests\WolframAlpha.NET Tests.csproj", "{B6711C8E-B8E1-46DB-BC2F-15A7B9E28C1A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D18B2383-5846-448B-B22D-CF8AFA31D2D4}"
 	ProjectSection(SolutionItems) = preProject

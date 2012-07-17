@@ -3,8 +3,9 @@ using System.Device.Location;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolframAlphaNET;
+using WolframAlphaNET.Enums;
 using WolframAlphaNET.Objects;
-using Unit = WolframAlphaNET.Unit;
+using Unit = WolframAlphaNET.Enums.Unit;
 
 namespace WolframAlphaNETTests
 {
@@ -91,98 +92,116 @@ namespace WolframAlphaNETTests
             const string expectedLanguage = "Spanish";
 
             Assert.IsNotNull(positiveResults.Warnings.Translation);
-            Assert.AreEqual(expectedOutput, positiveResults.Warnings.Translation.Trans);
-            Assert.AreEqual(expectedLanguage, positiveResults.Warnings.Translation.Lang);
+            Assert.AreEqual(expectedOutput, positiveResults.Warnings.Translation.TranslatedText);
+            Assert.AreEqual(expectedLanguage, positiveResults.Warnings.Translation.Language);
         }
 
         [TestMethod]
         public void ExcludePodIDsTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void FormatsTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void GPSLocationTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void IgnoreCaseTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void IncludePodIDsTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void IpAddressTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void LocationTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void MagnificationTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void MaxWidthTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void OutputUnitTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void ParseTimeoutTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void PodIndexTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void PodTimeoutTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void PodTitlesTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void ReInterpretTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void ScanTimeoutTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void ScannersTest()
         {
+            Assert.Inconclusive();
         }
 
         [TestMethod]
         public void UseAsyncTest()
         {
+            Assert.Inconclusive();
         }
     }
 }

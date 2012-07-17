@@ -3,7 +3,7 @@ using System.Configuration;
 using WolframAlphaNET;
 using WolframAlphaNET.Objects;
 
-namespace RestSharpWolframAlpha
+namespace WolframAlphaNETClient
 {
     public class Program
     {
@@ -22,11 +22,11 @@ namespace RestSharpWolframAlpha
 
             //Here we output the Wolfram|Alpha results.
             if (results.Error != null)
-                Console.WriteLine("Woops, where was an error: " + results.Error.Msg);
+                Console.WriteLine("Woops, where was an error: " + results.Error.Message);
 
-            if (results.DidYouMeans.HasElements())
+            if (results.DidYouMean.HasElements())
             {
-                foreach (DidYouMean didYouMean in results.DidYouMeans)
+                foreach (DidYouMean didYouMean in results.DidYouMean)
                 {
                     Console.WriteLine("Did you mean: " + didYouMean.Value);
                 }

@@ -5,31 +5,12 @@ using System.Globalization;
 using System.Net;
 using RestSharp;
 using RestSharp.Deserializers;
+using WolframAlphaNET.Enums;
 using WolframAlphaNET.Objects;
+using Unit = WolframAlphaNET.Enums.Unit;
 
 namespace WolframAlphaNET
 {
-    public enum Unit
-    {
-        NotSet,
-        Metric,
-        NonMetric
-    }
-
-    public enum Format
-    {
-        Image,
-        Html,
-        Plaintext,
-        Minput,
-        Moutput,
-        Cell,
-        MathML,
-        ImageMap,
-        Sound,
-        Wav
-    }
-
     public class WolframAlpha
     {
         private CultureInfo _culture = new CultureInfo("en");

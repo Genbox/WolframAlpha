@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using RestSharp;
@@ -26,7 +25,7 @@ namespace WolframAlphaNET
         /// <param name="includeInOriginal">When true, it will add the new pods to the original QueryResult</param>
         public static List<Pod> RecalculateResults(this QueryResult result, bool includeInOriginal = true)
         {
-            if (!string.IsNullOrEmpty(result.Recalculate) && string.IsNullOrEmpty(result.Timedout))
+            if (!string.IsNullOrEmpty(result.Recalculate) && !string.IsNullOrEmpty(result.Timedout))
             {
                 WebClient client = new WebClient();
                 client.Proxy = null;
@@ -35,26 +34,23 @@ namespace WolframAlphaNET
                 XmlAttributeDeserializer deserializer = new XmlAttributeDeserializer();
                 RestResponse response = new RestResponse();
                 response.Content = newPodsData;
-                List<Pod> newPods;
 
-                //Check if it was an async query
-                if (!string.IsNullOrEmpty(result.Recalculate) && result.Pods.Any(p => !string.IsNullOrEmpty(p.Async)))
-                {
-                    QueryResult asyncResult = deserializer.Deserialize<QueryResult>(response);
-                    newPods = asyncResult.Pods;
-                }
-                else
-                {
-                    newPods = deserializer.Deserialize<List<Pod>>(response);
-                    newPods.Sort((p1, p2) => p1.Position.CompareTo(p2.Position));
-                }
+                QueryResult asyncResult = deserializer.Deserialize<QueryResult>(response);
+                List<Pod> newPods = asyncResult.Pods;
+
+                newPods.Sort((p1, p2) => p1.Position.CompareTo(p2.Position));
 
                 if (includeInOriginal)
                 {
-                    foreach (Pod newPod in newPods)
+                    if (result.Pods == null)
+                        result.Pods = newPods;
+                    else
                     {
-                        if (!result.Pods.Contains(newPod))
-                            result.Pods.Add(newPod);
+                        foreach (Pod newPod in newPods)
+                        {
+                            if (!result.Pods.Contains(newPod))
+                                result.Pods.Add(newPod);
+                        }
                     }
 
                     //We make sure that the pods are in the right order.
