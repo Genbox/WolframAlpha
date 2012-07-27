@@ -8,7 +8,6 @@ namespace WolframAlphaNET.Objects
 {
     public class QueryResult
     {
-        public string RawResponse { get; set; }
         public bool Success { get; set; }
         public string Version { get; set; }
         public string DataTypes { get; set; }

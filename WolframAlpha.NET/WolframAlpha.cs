@@ -18,6 +18,7 @@ namespace WolframAlphaNET
         private const float Epsilon = 0.00001f;
         private string _appId;
         private static RestClient _client = new RestClient("http://api.wolframalpha.com/v2/");
+        private bool _useTls;
 
         /// <summary>
         /// Creates a new instance of the Wolfram Alpha API
@@ -39,6 +40,19 @@ namespace WolframAlphaNET
             PodTitles = new List<string>();
             PodIndex = new List<int>();
             Scanners = new List<string>();
+        }
+
+        /// <summary>
+        /// Set to true to use HTTPS instead of HTTP.
+        /// </summary>
+        public bool UseTLS
+        {
+            get { return _useTls; }
+            set
+            {
+                _client.BaseUrl = value ? _client.BaseUrl.Replace("http://", "https://") : _client.BaseUrl.Replace("https://", "http://");
+                _useTls = value;
+            }
         }
 
         //Output
@@ -194,13 +208,9 @@ namespace WolframAlphaNET
         public bool ValidateQuery(string query, out ValidateQueryResult result)
         {
             //http://api.wolframalpha.com/v2/validatequery?input=xx&appid=xxxxx
-            RestRequest request = new RestRequest("validatequery", Method.GET);
-            request.AddParameter("appid", _appId);
-            request.AddParameter("input", query);
-
-            RestResponse response = (RestResponse)_client.Execute(request);
-            XmlAttributeDeserializer deserializer = new XmlAttributeDeserializer();
-            ValidateQueryResult results = deserializer.Deserialize<ValidateQueryResult>(response);
+            RestRequest request = CreateRequest("validatequery",query);
+            
+            ValidateQueryResult results = GetResponse<ValidateQueryResult>(request);
 
             if (results != null)
             {
@@ -220,11 +230,7 @@ namespace WolframAlphaNET
         public QueryResult Query(string query)
         {
             //http://api.wolframalpha.com/v2/query?input=xx&appid=xxxxx
-            RestRequest request = new RestRequest("query", Method.GET);
-
-            //Required
-            request.AddParameter("appid", _appId);
-            request.AddParameter("input", query);
+            RestRequest request = CreateRequest("query", query);
 
             //Output
             if (Formats.HasElements())
@@ -325,13 +331,23 @@ namespace WolframAlphaNET
             if (EnableTranslate.HasValue)
                 request.AddParameter("translation", EnableTranslate.ToString().ToLower());
 
+            QueryResult results = GetResponse<QueryResult>(request);
+            return results;
+        }
+
+        private RestRequest CreateRequest(string function, string query)
+        {
+            RestRequest request = new RestRequest(function, Method.GET);
+            request.AddParameter("appid", _appId);
+            request.AddParameter("input", query);
+            return request;
+        }
+
+        private T GetResponse<T>(RestRequest request)
+        {
             RestResponse response = (RestResponse)_client.Execute(request);
             XmlAttributeDeserializer deserializer = new XmlAttributeDeserializer();
-            QueryResult results = deserializer.Deserialize<QueryResult>(response);
-
-            if (results != null)
-                results.RawResponse = response.Content;
-
+            T results = deserializer.Deserialize<T>(response);
             return results;
         }
     }

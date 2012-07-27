@@ -16,6 +16,7 @@ namespace WolframAlphaNETClient
             //Create the Engine.
             WolframAlpha wolfram = new WolframAlpha(_allId);
             wolfram.ScanTimeout = 0.1f; //We set ScanTimeout really low to get a quick answer. See RecalculateResults() below.
+            wolfram.UseTLS = true; //Use encryption
 
             //We search for something. Notice that we spelled it wrong.
             QueryResult results = wolfram.Query("Who is Danald Duck?");
