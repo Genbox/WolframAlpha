@@ -6,6 +6,7 @@ using System.Net;
 using RestSharp;
 using RestSharp.Deserializers;
 using WolframAlphaNET.Enums;
+using WolframAlphaNET.Misc;
 using WolframAlphaNET.Objects;
 using Unit = WolframAlphaNET.Enums.Unit;
 

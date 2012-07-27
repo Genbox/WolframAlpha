@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Configuration;
 using WolframAlphaNET;
+using WolframAlphaNET.Misc;
 using WolframAlphaNET.Objects;
 
 namespace WolframAlphaNETClient
 {
     public class Program
     {
+        //Insert your App ID into the App.config file
+        private static string _allId = ConfigurationManager.AppSettings["AppId"];
+
         static void Main(string[] args)
         {
             //Create the Engine.
-            WolframAlpha wolfram = new WolframAlpha(ConfigurationManager.AppSettings["AppId"]);
+            WolframAlpha wolfram = new WolframAlpha(_allId);
             wolfram.ScanTimeout = 0.1f; //We set ScanTimeout really low to get a quick answer. See RecalculateResults() below.
 
             //We search for something. Notice that we spelled it wrong.

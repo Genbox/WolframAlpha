@@ -39,7 +39,7 @@
     <Reference Include="System.Device" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Misc\ExtensionMethods.cs" />
     <Compile Include="Enums\Format.cs" />
     <Compile Include="Objects\Alternative.cs" />
     <Compile Include="Objects\Assumption.cs" />
@@ -75,7 +75,7 @@
     <Compile Include="Objects\Warnings\Translation.cs" />
     <Compile Include="Objects\Warnings\Warning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryResultHelper.cs" />
+    <Compile Include="Misc\QueryResultHelper.cs" />
     <Compile Include="Enums\Unit.cs" />
     <Compile Include="WolframAlpha.cs" />
   </ItemGroup>

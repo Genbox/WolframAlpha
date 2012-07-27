@@ -28,9 +28,6 @@ namespace WolframAlphaNET.Objects
         public string Related { get; set; }
         public List<Pod> Pods { get; set; }
 
-        /// <summary>
-        /// TODO: List assumption types
-        /// </summary>
         public List<Assumption> Assumptions { get; set; }
         public List<Source> Sources { get; set; }
         public Warning Warnings { get; set; }

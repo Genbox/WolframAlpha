@@ -5,7 +5,7 @@ using RestSharp;
 using RestSharp.Deserializers;
 using WolframAlphaNET.Objects;
 
-namespace WolframAlphaNET
+namespace WolframAlphaNET.Misc
 {
     public static class QueryResultHelper
     {

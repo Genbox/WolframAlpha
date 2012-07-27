@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolframAlphaNET;
 using WolframAlphaNET.Enums;
+using WolframAlphaNET.Misc;
 using WolframAlphaNET.Objects;
 using Unit = WolframAlphaNET.Enums.Unit;
 
