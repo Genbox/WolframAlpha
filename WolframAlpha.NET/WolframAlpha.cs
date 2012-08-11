@@ -31,8 +31,6 @@ namespace WolframAlphaNET
 
             _appId = appId;
 
-            _client.Proxy = null;
-
             Formats = new List<Format>();
             Assumptions = new List<string>();
             IncludePodIDs = new List<string>();

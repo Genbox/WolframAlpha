@@ -28,7 +28,6 @@ namespace WolframAlphaNET.Misc
             if (!string.IsNullOrEmpty(result.Recalculate) && !string.IsNullOrEmpty(result.Timedout))
             {
                 WebClient client = new WebClient();
-                client.Proxy = null;
                 string newPodsData = client.DownloadString(result.Recalculate);
 
                 XmlAttributeDeserializer deserializer = new XmlAttributeDeserializer();
@@ -69,7 +68,6 @@ namespace WolframAlphaNET.Misc
             {
                 IEnumerable<string> asyncPods = result.Pods.Where(p => !string.IsNullOrEmpty(p.Async)).Select(p => p.Async);
                 WebClient client = new WebClient();
-                client.Proxy = null;
 
                 XmlAttributeDeserializer deserializer = new XmlAttributeDeserializer();
                 RestResponse response = new RestResponse();
