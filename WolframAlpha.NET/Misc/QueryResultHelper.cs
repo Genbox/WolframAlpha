@@ -35,6 +35,9 @@ namespace WolframAlphaNET.Misc
                 response.Content = newPodsData;
 
                 QueryResult asyncResult = deserializer.Deserialize<QueryResult>(response);
+                result.Recalculate = asyncResult.Recalculate;
+                result.TimedoutPods = asyncResult.TimedoutPods;
+
                 List<Pod> newPods = asyncResult.Pods;
 
                 newPods.Sort((p1, p2) => p1.Position.CompareTo(p2.Position));
