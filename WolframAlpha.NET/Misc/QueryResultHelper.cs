@@ -40,26 +40,29 @@ namespace WolframAlphaNET.Misc
 
                 List<Pod> newPods = asyncResult.Pods;
 
-                newPods.Sort((p1, p2) => p1.Position.CompareTo(p2.Position));
-
-                if (includeInOriginal)
+                if (newPods != null)
                 {
-                    if (result.Pods == null)
-                        result.Pods = newPods;
-                    else
+                    newPods.Sort((p1, p2) => p1.Position.CompareTo(p2.Position));
+
+                    if (includeInOriginal)
                     {
-                        foreach (Pod newPod in newPods)
+                        if (result.Pods == null)
+                            result.Pods = newPods;
+                        else
                         {
-                            if (!result.Pods.Contains(newPod))
-                                result.Pods.Add(newPod);
+                            foreach (Pod newPod in newPods)
+                            {
+                                if (!result.Pods.Contains(newPod))
+                                    result.Pods.Add(newPod);
+                            }
                         }
+
+                        //We make sure that the pods are in the right order.
+                        result.Pods.Sort((p1, p2) => p1.Position.CompareTo(p2.Position));
                     }
 
-                    //We make sure that the pods are in the right order.
-                    result.Pods.Sort((p1, p2) => p1.Position.CompareTo(p2.Position));
+                    return newPods;
                 }
-
-                return newPods;
             }
 
             return new List<Pod>();
