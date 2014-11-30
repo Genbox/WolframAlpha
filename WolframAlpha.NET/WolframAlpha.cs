@@ -14,10 +14,10 @@ namespace WolframAlphaNET
 {
     public class WolframAlpha
     {
+        private RestClient _client = new RestClient();
         private CultureInfo _culture = new CultureInfo("en");
         private const float Epsilon = 0.00001f;
         private string _appId;
-        private static RestClient _client = new RestClient("http://api.wolframalpha.com/v2/");
         private bool _useTls;
 
         /// <summary>
@@ -31,6 +31,7 @@ namespace WolframAlphaNET
 
             _appId = appId;
 
+            ApiUrl = "api.wolframalpha.com/v2/";
             Formats = new List<Format>();
             Assumptions = new List<string>();
             IncludePodIDs = new List<string>();
@@ -41,15 +42,56 @@ namespace WolframAlphaNET
         }
 
         /// <summary>
-        /// Set to true to use HTTPS instead of HTTP.
+        /// Set to false to use HTTP instead of HTTPS. HTTPS is used by default.
         /// </summary>
         public bool UseTLS
         {
             get { return _useTls; }
             set
             {
-                _client.BaseUrl = value ? _client.BaseUrl.Replace("http://", "https://") : _client.BaseUrl.Replace("https://", "http://");
                 _useTls = value;
+
+                string oldUrl = ApiUrl;
+
+                if (string.IsNullOrWhiteSpace(oldUrl))
+                    return;
+
+                if (oldUrl.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
+                    oldUrl = oldUrl.Substring(8);
+                else if (oldUrl.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase))
+                    oldUrl = oldUrl.Substring(7);
+
+                _client.BaseUrl = _useTls ? new Uri("https://" + oldUrl) : new Uri("http://" + oldUrl);
+            }
+        }
+
+        /// <summary>
+        /// The URL which the service listens on. IF you don't set the scheme to http:// or https:// it will default to https.
+        /// </summary>
+        public string ApiUrl
+        {
+            get { return _client.BaseUrl.ToString(); }
+            set
+            {
+                string newUrl = value.Trim();
+
+                if (string.IsNullOrWhiteSpace(newUrl))
+                    return;
+
+                if (newUrl.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _useTls = true;
+                    newUrl = newUrl.Substring(8);
+                }
+                else if (newUrl.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _useTls = false;
+                    newUrl = newUrl.Substring(7);
+                }
+                else
+                    _useTls = true;
+
+                _client.BaseUrl = _useTls ? new Uri("https://" + newUrl) : new Uri("http://" + newUrl);
             }
         }
 

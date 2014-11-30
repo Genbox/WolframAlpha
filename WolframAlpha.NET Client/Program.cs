@@ -9,12 +9,12 @@ namespace WolframAlphaNETClient
     public class Program
     {
         //Insert your App ID into the App.config file
-        private static string _allId = ConfigurationManager.AppSettings["AppId"];
+        private static string _appId = ConfigurationManager.AppSettings["AppId"];
 
         static void Main(string[] args)
         {
             //Create the Engine.
-            WolframAlpha wolfram = new WolframAlpha(_allId);
+            WolframAlpha wolfram = new WolframAlpha(_appId);
             wolfram.ScanTimeout = 0.1f; //We set ScanTimeout really low to get a quick answer. See RecalculateResults() below.
             wolfram.UseTLS = true; //Use encryption
 
