@@ -6,6 +6,8 @@ namespace WolframAlphaNET.Objects
 {
     public class SubPod
     {
+        public string Minput { get; set; }
+
         public string Title { get; set; }
         public string Plaintext { get; set; }
 
