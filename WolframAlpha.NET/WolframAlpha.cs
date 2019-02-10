@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Device.Location;
 using System.Globalization;
 using System.Net;
+using GeoCoordinatePortable;
 using RestSharp;
-using RestSharp.Deserializers;
+using RestSharp.Serialization.Xml;
 using WolframAlphaNET.Enums;
 using WolframAlphaNET.Misc;
 using WolframAlphaNET.Objects;
@@ -249,7 +249,7 @@ namespace WolframAlphaNET
         {
             //http://api.wolframalpha.com/v2/validatequery?input=xx&appid=xxxxx
             RestRequest request = CreateRequest("validatequery",query);
-            
+
             ValidateQueryResult results = GetResponse<ValidateQueryResult>(request);
 
             if (results != null)
@@ -263,7 +263,7 @@ namespace WolframAlphaNET
         }
 
         /// <summary>
-        /// Query on Wolfram Alpha using the specified 
+        /// Query on Wolfram Alpha using the specified
         /// </summary>
         /// <param name="query">The query you would like to search for on Wolfram Alpha</param>
         /// <returns>The results of the query</returns>

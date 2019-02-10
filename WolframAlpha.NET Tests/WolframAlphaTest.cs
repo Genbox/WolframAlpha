@@ -1,7 +1,8 @@
-﻿using System.Configuration;
-using System.Device.Location;
+﻿using System.Globalization;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading;
+using GeoCoordinatePortable;
+using NUnit.Framework;
 using WolframAlphaNET;
 using WolframAlphaNET.Enums;
 using WolframAlphaNET.Misc;
@@ -10,12 +11,18 @@ using Unit = WolframAlphaNET.Enums.Unit;
 
 namespace WolframAlphaNETTests
 {
-    [TestClass]
+    [TestFixture]
     public class WolframAlphaTest
     {
-        private string _appId = ConfigurationManager.AppSettings["AppId"];
+        private string _appId = "INSERT APPID HERE";
 
-        [TestMethod]
+        [SetUp]
+        public void Init()
+        {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+        }
+
+        [Test]
         public void WolframAlphaConstructorTest()
         {
             WolframAlpha wolfram = new WolframAlpha(_appId);
@@ -28,12 +35,12 @@ namespace WolframAlphaNETTests
             Assert.IsNotNull(wolfram.Scanners);
         }
 
-        [TestMethod]
+        [Test]
         public void SearchTest()
         {
             WolframAlpha wolframAlpha = new WolframAlpha(_appId);
 
-            const string expectedPIApproximation = "3.1415926535897932384626433832795028841971693993751058...";
+            const string expectedPIApproximation = "3.141592653589793238462643383279502884197169399375105820974...";
 
             QueryResult actual = wolframAlpha.Query("PI");
             Assert.IsNotNull(actual);
@@ -44,7 +51,7 @@ namespace WolframAlphaNETTests
             Assert.AreEqual(expectedPIApproximation, actualPIApproximation);
         }
 
-        [TestMethod]
+        [Test]
         public void ValidateQueryTest()
         {
             WolframAlpha wolframAlpha = new WolframAlpha(_appId);
@@ -77,7 +84,7 @@ namespace WolframAlphaNETTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void EnableTranslateTest()
         {
             //First try without translation
@@ -97,109 +104,109 @@ namespace WolframAlphaNETTests
             Assert.AreEqual(expectedLanguage, positiveResults.Warnings.Translation.Language);
         }
 
-        [TestMethod]
+        [Test]
         public void ExcludePodIDsTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void FormatsTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void GPSLocationTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void IgnoreCaseTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void IncludePodIDsTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void IpAddressTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void LocationTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void MagnificationTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void MaxWidthTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void OutputUnitTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void ParseTimeoutTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void PodIndexTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void PodTimeoutTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void PodTitlesTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void ReInterpretTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void ScanTimeoutTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void ScannersTest()
         {
             Assert.Inconclusive();
         }
 
-        [TestMethod]
+        [Test]
         public void UseAsyncTest()
         {
             Assert.Inconclusive();
