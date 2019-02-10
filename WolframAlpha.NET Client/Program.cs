@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using WolframAlphaNET;
 using WolframAlphaNET.Misc;
 using WolframAlphaNET.Objects;
@@ -9,7 +8,7 @@ namespace WolframAlphaNETClient
     public class Program
     {
         //Insert your App ID into the App.config file
-        private static string _appId = ConfigurationManager.AppSettings["AppId"];
+        private static string _appId = "INSERT APPID HERE";
 
         static void Main(string[] args)
         {

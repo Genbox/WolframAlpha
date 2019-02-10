@@ -1,105 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A6C3A23B-C045-4589-A83A-62E5E153E18E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WolframAlphaNET</RootNamespace>
-    <AssemblyName>WolframAlpha.NET</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\WolframAlpha.NET.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\WolframAlpha.NET.XML</DocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="RestSharp, Version=105.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Device" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Misc\ExtensionMethods.cs" />
-    <Compile Include="Enums\Format.cs" />
-    <Compile Include="Objects\Alternative.cs" />
-    <Compile Include="Objects\Assumption.cs" />
-    <Compile Include="Objects\DidYouMean.cs" />
-    <Compile Include="Objects\Errors\Error.cs" />
-    <Compile Include="Objects\FutureTopic.cs" />
-    <Compile Include="Objects\Generalization.cs" />
-    <Compile Include="Objects\Info.cs" />
-    <Compile Include="Objects\LanguageMessage.cs" />
-    <Compile Include="Objects\Output\CSS.cs" />
-    <Compile Include="Objects\Output\ExamplePage.cs" />
-    <Compile Include="Objects\Output\Image.cs" />
-    <Compile Include="Objects\Output\Link.cs" />
-    <Compile Include="Objects\Output\Markup.cs" />
-    <Compile Include="Objects\Output\MathML.cs" />
-    <Compile Include="Objects\Output\Script.cs" />
-    <Compile Include="Objects\Output\Sound.cs" />
-    <Compile Include="Objects\Pod.cs" />
-    <Compile Include="Objects\QueryResult.cs" />
-    <Compile Include="Objects\RelatedExample.cs" />
-    <Compile Include="Objects\Source.cs" />
-    <Compile Include="Objects\State.cs" />
-    <Compile Include="Objects\StateContainer.cs" />
-    <Compile Include="Objects\StateList.cs" />
-    <Compile Include="Objects\SubPod.cs" />
-    <Compile Include="Objects\Tip.cs" />
-    <Compile Include="Objects\Unit.cs" />
-    <Compile Include="Objects\ValidateQueryResult.cs" />
-    <Compile Include="Objects\Value.cs" />
-    <Compile Include="Objects\Warnings\Delimiters.cs" />
-    <Compile Include="Objects\Warnings\Reinterpret.cs" />
-    <Compile Include="Objects\Warnings\SpellCheck.cs" />
-    <Compile Include="Objects\Warnings\Translation.cs" />
-    <Compile Include="Objects\Warnings\Warning.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Misc\QueryResultHelper.cs" />
-    <Compile Include="Enums\Unit.cs" />
-    <Compile Include="WolframAlpha.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <Title>WolframAlpha.NET</Title>
+        <Copyright>Copyright © Ian Qvist 2012</Copyright>
+        <PackageProjectUrl>https://github.com/Genbox/WolframAlpha.Net</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Genbox/WolframAlpha.Net</RepositoryUrl>
     </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+    <ItemGroup>
+      <PackageReference Include="GeoCoordinate.NetCore" Version="1.0.0.1" />
+      <PackageReference Include="RestSharp" Version="106.6.7" />
+    </ItemGroup>
+
 </Project>

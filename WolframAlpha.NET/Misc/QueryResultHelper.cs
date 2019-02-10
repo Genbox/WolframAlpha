@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net;
 using RestSharp;
-using RestSharp.Deserializers;
+using RestSharp.Serialization.Xml;
 using WolframAlphaNET.Objects;
 
 namespace WolframAlphaNET.Misc
