@@ -2,18 +2,22 @@
 
 ### Features
 
-* Based on RestSharp (http://restsharp.org) to deserialize the Wolfram|Alpha XML into objects
-* Handles Assumptions, different formats, warnings, tips, did you means, timings and more.
+* Based on RestSharp (http://restsharp.org) to deserialize the Wolfram|Alpha XML
+  into objects
+* Handles Assumptions, different formats, warnings, tips, did you means, timings
+  and more.
 
 ### Tutorial
 
 First you need to get a Wolfram|Alpha AppID from their website.
 
-1. Go to https://developer.wolframalpha.com/portal/signup.html and create an account if you don't already have one.
+1. Go to https://developer.wolframalpha.com/portal/signup.html and create an account
+   if you don't already have one.
 2. Go to http://developer.wolframalpha.com/portal/myapps/index.html and click "Get an AppID"
 3. Just follow their wizard and then you will have an AppID in the format: XXXXXX-XXXXXXXXXX
-4. Paste the AppID into the WolframAlphaNETClient/App.config file where it says "INSERT APPID HERE".
-5. Press F5 to run the client
+4. Paste the AppID into the `_appId` field inside `WolframAlpha.NET Client` and
+   `WolframAlpha.NET Tests` where it says `"INSERT APPID HERE"`.
+5. Press F5 to run the client.
 
 ### Examples
 

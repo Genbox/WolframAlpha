@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="GeoCoordinate.NetCore" Version="1.0.0.1" />
+      <PackageReference Include="GeoCoordinate.NetStandard1" Version="1.0.1" />
       <PackageReference Include="RestSharp" Version="106.6.7" />
     </ItemGroup>
 
