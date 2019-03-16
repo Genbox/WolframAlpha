@@ -7,6 +7,7 @@
     <PackageProjectUrl>https://github.com/Genbox/WolframAlpha.Net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Genbox/WolframAlpha.Net</RepositoryUrl>
     <RootNamespace>WolframAlpha</RootNamespace>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
