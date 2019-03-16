@@ -3,9 +3,9 @@ using System.Linq;
 using System.Net;
 using RestSharp;
 using RestSharp.Serialization.Xml;
-using WolframAlpha.Objects;
+using WolframAlphaNET.Objects;
 
-namespace WolframAlpha.Misc
+namespace WolframAlphaNET.Misc
 {
     public static class QueryResultHelper
     {

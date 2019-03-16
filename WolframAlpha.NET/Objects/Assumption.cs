@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace WolframAlpha.Objects
+namespace WolframAlphaNET.Objects
 {
     public class Assumption
     {

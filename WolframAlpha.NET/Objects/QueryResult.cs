@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using RestSharp.Deserializers;
-using WolframAlpha.Objects.Errors;
-using WolframAlpha.Objects.Output;
-using WolframAlpha.Objects.Warnings;
+using WolframAlphaNET.Objects.Errors;
+using WolframAlphaNET.Objects.Output;
+using WolframAlphaNET.Objects.Warnings;
 
-namespace WolframAlpha.Objects
+namespace WolframAlphaNET.Objects
 {
     public class QueryResult
     {

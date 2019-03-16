@@ -1,6 +1,6 @@
 ﻿using System;
-using WolframAlpha.Misc;
-using WolframAlpha.Objects;
+using WolframAlphaNET.Misc;
+using WolframAlphaNET.Objects;
 
 namespace WolframAlpha.Client
 {
@@ -12,7 +12,7 @@ namespace WolframAlpha.Client
         static void Main(string[] args)
         {
             //Create the Engine.
-            WolframAlpha wolfram = new WolframAlpha(_appId);
+            WolframAlphaNET.WolframAlpha wolfram = new WolframAlphaNET.WolframAlpha(_appId);
             wolfram.ScanTimeout = 0.1f; //We set ScanTimeout really low to get a quick answer. See RecalculateResults() below.
             wolfram.UseTLS = true; //Use encryption
 

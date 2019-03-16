@@ -1,4 +1,4 @@
-namespace WolframAlpha.Objects.Output
+namespace WolframAlphaNET.Objects.Output
 {
     public class Image
     {

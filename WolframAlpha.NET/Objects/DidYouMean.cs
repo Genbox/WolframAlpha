@@ -1,4 +1,4 @@
-namespace WolframAlpha.Objects
+namespace WolframAlphaNET.Objects
 {
     public class DidYouMean
     {

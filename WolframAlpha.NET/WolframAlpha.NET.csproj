@@ -2,12 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Title>WolframAlpha.NET</Title>
+    <Version>1.0.1</Version>
     <Copyright>Copyright © Ian Qvist 2019</Copyright>
     <PackageProjectUrl>https://github.com/Genbox/WolframAlpha.Net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Genbox/WolframAlpha.Net</RepositoryUrl>
-    <RootNamespace>WolframAlpha</RootNamespace>
-    <Version>1.0.1</Version>
+    <RootNamespace>WolframAlphaNET</RootNamespace>
+    <PackageId>WolframAlphaNET</PackageId>
+    <AssemblyName>WolframAlphaNET</AssemblyName>
+    <RepositoryType>git</RepositoryType>
+    <Description>A full implementation of the WolframAlpha 2.0 API</Description>
+    <Authors>Ian Qvist</Authors>
+    <PackageTags>WolframAlpha</PackageTags>
+    <PackageLicenseUrl>https://github.com/Genbox/WolframAlpha.Net/blob/master/LICENSE.txt</PackageLicenseUrl>
   </PropertyGroup>
 
   <ItemGroup>

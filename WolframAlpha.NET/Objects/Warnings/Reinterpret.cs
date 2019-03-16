@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace WolframAlpha.Objects.Warnings
+namespace WolframAlphaNET.Objects.Warnings
 {
     public class Reinterpret
     {

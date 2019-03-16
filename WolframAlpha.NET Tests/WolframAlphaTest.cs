@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading;
 using GeoCoordinatePortable;
-using WolframAlpha.Enums;
-using WolframAlpha.Misc;
-using WolframAlpha.Objects;
+using WolframAlphaNET.Enums;
+using WolframAlphaNET.Misc;
+using WolframAlphaNET.Objects;
 using Xunit;
-using Unit = WolframAlpha.Enums.Unit;
+using Unit = WolframAlphaNET.Enums.Unit;
 
 namespace WolframAlpha.Tests
 {
@@ -22,7 +22,7 @@ namespace WolframAlpha.Tests
         [Fact]
         public void WolframAlphaConstructorTest()
         {
-            WolframAlpha wolfram = new WolframAlpha(_appId);
+            WolframAlphaNET.WolframAlpha wolfram = new WolframAlphaNET.WolframAlpha(_appId);
             Assert.NotNull(wolfram.Assumptions);
             Assert.NotNull(wolfram.ExcludePodIDs);
             Assert.NotNull(wolfram.Formats);
@@ -35,7 +35,7 @@ namespace WolframAlpha.Tests
         [Fact]
         public void SearchTest()
         {
-            WolframAlpha wolframAlpha = new WolframAlpha(_appId);
+            WolframAlphaNET.WolframAlpha wolframAlpha = new WolframAlphaNET.WolframAlpha(_appId);
 
             const string expectedPIApproximation = "3.141592653589793238462643383279502884197169399375105820974...";
 
@@ -51,7 +51,7 @@ namespace WolframAlpha.Tests
         [Fact]
         public void ValidateQueryTest()
         {
-            WolframAlpha wolframAlpha = new WolframAlpha(_appId);
+            WolframAlphaNET.WolframAlpha wolframAlpha = new WolframAlphaNET.WolframAlpha(_appId);
             //We put in a lot of parameters
             wolframAlpha.EnableTranslate = true;
             wolframAlpha.MaxWidth = 200;
@@ -84,7 +84,7 @@ namespace WolframAlpha.Tests
         public void EnableTranslateTest()
         {
             //First try without translation
-            WolframAlpha wolframAlpha = new WolframAlpha(_appId);
+            WolframAlphaNET.WolframAlpha wolframAlpha = new WolframAlphaNET.WolframAlpha(_appId);
             wolframAlpha.EnableTranslate = false;
             QueryResult negativeResults = wolframAlpha.Query("uno dos tres");
             Assert.Null(negativeResults.Warnings);

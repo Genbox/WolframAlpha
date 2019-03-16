@@ -1,6 +1,6 @@
 using RestSharp.Deserializers;
 
-namespace WolframAlpha.Objects
+namespace WolframAlphaNET.Objects
 {
     public class RelatedExample
     {
