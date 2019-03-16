@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using WolframAlphaNET.Objects.Errors;
-using WolframAlphaNET.Objects.Output;
+using WolframAlpha.Objects.Errors;
+using WolframAlpha.Objects.Output;
 
-namespace WolframAlphaNET.Objects
+namespace WolframAlpha.Objects
 {
     public class Pod
     {

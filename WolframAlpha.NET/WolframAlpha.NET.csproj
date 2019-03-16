@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <Title>WolframAlpha.NET</Title>
-        <Copyright>Copyright © Ian Qvist 2012</Copyright>
-        <PackageProjectUrl>https://github.com/Genbox/WolframAlpha.Net</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/Genbox/WolframAlpha.Net</RepositoryUrl>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Title>WolframAlpha.NET</Title>
+    <Copyright>Copyright © Ian Qvist 2019</Copyright>
+    <PackageProjectUrl>https://github.com/Genbox/WolframAlpha.Net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Genbox/WolframAlpha.Net</RepositoryUrl>
+    <RootNamespace>WolframAlpha</RootNamespace>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="GeoCoordinate.NetStandard1" Version="1.0.1" />
-      <PackageReference Include="RestSharp" Version="106.6.7" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="GeoCoordinate.NetStandard1" Version="1.0.1" />
+    <PackageReference Include="RestSharp" Version="106.6.7" />
+  </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 using RestSharp.Deserializers;
 
-namespace WolframAlphaNET.Objects.Errors
+namespace WolframAlpha.Objects.Errors
 {
     public class Error
     {

@@ -1,14 +1,13 @@
 ﻿using System;
-using WolframAlphaNET;
-using WolframAlphaNET.Misc;
-using WolframAlphaNET.Objects;
+using WolframAlpha.Misc;
+using WolframAlpha.Objects;
 
-namespace WolframAlphaNETClient
+namespace WolframAlpha.Client
 {
     public class Program
     {
         //Insert your App ID into the App.config file
-        private static string _appId = "INSERT APPID HERE";
+        private static readonly string _appId = "INSERT APPID HERE";
 
         static void Main(string[] args)
         {

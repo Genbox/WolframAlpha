@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace WolframAlphaNET.Objects
+namespace WolframAlpha.Objects
 {
     public class StateContainer
     {

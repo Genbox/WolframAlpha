@@ -1,4 +1,4 @@
-namespace WolframAlphaNET.Objects.Warnings
+namespace WolframAlpha.Objects.Warnings
 {
     public class Delimiters
     {

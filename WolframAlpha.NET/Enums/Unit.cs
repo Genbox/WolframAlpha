@@ -1,4 +1,4 @@
-namespace WolframAlphaNET.Enums
+namespace WolframAlpha.Enums
 {
     public enum Unit
     {

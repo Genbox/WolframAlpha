@@ -1,4 +1,4 @@
-namespace WolframAlphaNET.Objects
+namespace WolframAlpha.Objects
 {
     public class Alternative
     {

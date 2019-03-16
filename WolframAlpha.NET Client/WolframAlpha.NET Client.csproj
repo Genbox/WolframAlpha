@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
-        <RootNamespace>WolframAlpha.NET_Client</RootNamespace>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>WolframAlpha.Client</RootNamespace>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\WolframAlpha.NET\WolframAlpha.NET.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WolframAlpha.NET\WolframAlpha.NET.csproj" />
+  </ItemGroup>
 
 </Project>

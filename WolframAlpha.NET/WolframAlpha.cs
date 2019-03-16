@@ -5,19 +5,19 @@ using System.Net;
 using GeoCoordinatePortable;
 using RestSharp;
 using RestSharp.Serialization.Xml;
-using WolframAlphaNET.Enums;
-using WolframAlphaNET.Misc;
-using WolframAlphaNET.Objects;
-using Unit = WolframAlphaNET.Enums.Unit;
+using WolframAlpha.Enums;
+using WolframAlpha.Misc;
+using WolframAlpha.Objects;
+using Unit = WolframAlpha.Enums.Unit;
 
-namespace WolframAlphaNET
+namespace WolframAlpha
 {
     public class WolframAlpha
     {
-        private RestClient _client = new RestClient();
-        private CultureInfo _culture = new CultureInfo("en");
+        private readonly RestClient _client = new RestClient();
+        private readonly CultureInfo _culture = new CultureInfo("en");
+        private readonly string _appId;
         private const float Epsilon = 0.00001f;
-        private string _appId;
         private bool _useTls;
 
         /// <summary>

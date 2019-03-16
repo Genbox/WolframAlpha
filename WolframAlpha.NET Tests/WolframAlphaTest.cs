@@ -2,40 +2,37 @@
 using System.Linq;
 using System.Threading;
 using GeoCoordinatePortable;
-using NUnit.Framework;
-using WolframAlphaNET;
-using WolframAlphaNET.Enums;
-using WolframAlphaNET.Misc;
-using WolframAlphaNET.Objects;
-using Unit = WolframAlphaNET.Enums.Unit;
+using WolframAlpha.Enums;
+using WolframAlpha.Misc;
+using WolframAlpha.Objects;
+using Xunit;
+using Unit = WolframAlpha.Enums.Unit;
 
-namespace WolframAlphaNETTests
+namespace WolframAlpha.Tests
 {
-    [TestFixture]
     public class WolframAlphaTest
     {
-        private string _appId = "INSERT APPID HERE";
+        private readonly string _appId = "YOUR APPID HERE";
 
-        [SetUp]
-        public void Init()
+        public WolframAlphaTest()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
         }
 
-        [Test]
+        [Fact]
         public void WolframAlphaConstructorTest()
         {
             WolframAlpha wolfram = new WolframAlpha(_appId);
-            Assert.IsNotNull(wolfram.Assumptions);
-            Assert.IsNotNull(wolfram.ExcludePodIDs);
-            Assert.IsNotNull(wolfram.Formats);
-            Assert.IsNotNull(wolfram.IncludePodIDs);
-            Assert.IsNotNull(wolfram.PodTitles);
-            Assert.IsNotNull(wolfram.PodIndex);
-            Assert.IsNotNull(wolfram.Scanners);
+            Assert.NotNull(wolfram.Assumptions);
+            Assert.NotNull(wolfram.ExcludePodIDs);
+            Assert.NotNull(wolfram.Formats);
+            Assert.NotNull(wolfram.IncludePodIDs);
+            Assert.NotNull(wolfram.PodTitles);
+            Assert.NotNull(wolfram.PodIndex);
+            Assert.NotNull(wolfram.Scanners);
         }
 
-        [Test]
+        [Fact]
         public void SearchTest()
         {
             WolframAlpha wolframAlpha = new WolframAlpha(_appId);
@@ -43,15 +40,15 @@ namespace WolframAlphaNETTests
             const string expectedPIApproximation = "3.141592653589793238462643383279502884197169399375105820974...";
 
             QueryResult actual = wolframAlpha.Query("PI");
-            Assert.IsNotNull(actual);
+            Assert.NotNull(actual);
 
             //Get the interesting subpod
-            string actualPIApproximation = QueryResultHelper.GetPrimaryPod(actual).SubPods.First().Plaintext;
+            string actualPIApproximation = actual.GetPrimaryPod().SubPods.First().Plaintext;
 
-            Assert.AreEqual(expectedPIApproximation, actualPIApproximation);
+            Assert.Equal(expectedPIApproximation, actualPIApproximation);
         }
 
-        [Test]
+        [Fact]
         public void ValidateQueryTest()
         {
             WolframAlpha wolframAlpha = new WolframAlpha(_appId);
@@ -76,22 +73,21 @@ namespace WolframAlphaNETTests
             wolframAlpha.PlotWidth = 200;
             wolframAlpha.PodTimeout = 5;
 
-            ValidateQueryResult results;
             const bool expected = true;
-            bool actual = wolframAlpha.ValidateQuery("PI", out results);
+            bool actual = wolframAlpha.ValidateQuery("PI", out var results);
 
-            Assert.IsNotNull(results);
-            Assert.AreEqual(expected, actual);
+            Assert.NotNull(results);
+            Assert.Equal(expected, actual);
         }
 
-        [Test]
+        [Fact]
         public void EnableTranslateTest()
         {
             //First try without translation
             WolframAlpha wolframAlpha = new WolframAlpha(_appId);
             wolframAlpha.EnableTranslate = false;
             QueryResult negativeResults = wolframAlpha.Query("uno dos tres");
-            Assert.IsNull(negativeResults.Warnings);
+            Assert.Null(negativeResults.Warnings);
 
             //Then try with translation
             wolframAlpha.EnableTranslate = true;
@@ -99,117 +95,9 @@ namespace WolframAlphaNETTests
             const string expectedOutput = "one two three";
             const string expectedLanguage = "Spanish";
 
-            Assert.IsNotNull(positiveResults.Warnings.Translation);
-            Assert.AreEqual(expectedOutput, positiveResults.Warnings.Translation.TranslatedText);
-            Assert.AreEqual(expectedLanguage, positiveResults.Warnings.Translation.Language);
-        }
-
-        [Test]
-        public void ExcludePodIDsTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void FormatsTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void GPSLocationTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void IgnoreCaseTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void IncludePodIDsTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void IpAddressTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void LocationTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void MagnificationTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void MaxWidthTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void OutputUnitTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void ParseTimeoutTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void PodIndexTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void PodTimeoutTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void PodTitlesTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void ReInterpretTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void ScanTimeoutTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void ScannersTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void UseAsyncTest()
-        {
-            Assert.Inconclusive();
+            Assert.NotNull(positiveResults.Warnings.Translation);
+            Assert.Equal(expectedOutput, positiveResults.Warnings.Translation.TranslatedText);
+            Assert.Equal(expectedLanguage, positiveResults.Warnings.Translation.Language);
         }
     }
 }
