@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>WolframAlpha.Client</RootNamespace>
+    <IsPackable>False</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
