@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\Properties.targets" />
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RootNamespace>WolframAlpha.Tests</RootNamespace>
     <IsPackable>False</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WolframAlpha.NET\WolframAlpha.NET.csproj" />
+    <ProjectReference Include="..\WolframAlphaNet\WolframAlphaNet.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframAlpha.NET", "WolframAlpha.NET\WolframAlpha.NET.csproj", "{BA103F20-0047-4C92-9461-393F1C398AC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolframAlphaNet", "WolframAlphaNet\WolframAlphaNet.csproj", "{BA103F20-0047-4C92-9461-393F1C398AC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframAlpha.NET Client", "WolframAlpha.NET Client\WolframAlpha.NET Client.csproj", "{82AEB5F7-DFCC-4FE1-8F52-A6EE02317780}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolframAlphaNet.Examples", "WolframAlphaNet.Examples\WolframAlphaNet.Examples.csproj", "{82AEB5F7-DFCC-4FE1-8F52-A6EE02317780}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframAlpha.NET Tests", "WolframAlpha.NET Tests\WolframAlpha.NET Tests.csproj", "{9B763777-1BA5-4627-B1E9-1EA2DF0D8E26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolframAlphaNet.Tests", "WolframAlphaNet.Tests\WolframAlphaNet.Tests.csproj", "{9B763777-1BA5-4627-B1E9-1EA2DF0D8E26}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Imports", "Imports", "{1C7E87AB-0A97-4E3D-97E0-13621BAECBDE}"
+	ProjectSection(SolutionItems) = preProject
+		..\Properties.targets = ..\Properties.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +63,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB5174B5-A4D8-40DE-8AC9-97CC579D0B3C}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = WolframAlphaNET.vsmdi

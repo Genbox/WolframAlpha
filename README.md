@@ -54,4 +54,4 @@ static void Main(string[] args)
 
 ```
 
-For more examples, take a look at the WolframAlpha.NET Client and WolframAlpha.NET Tests projects.
+For more examples, take a look at the WolframAlphaNet.Examples and WolframAlphaNet.Tests projects.
