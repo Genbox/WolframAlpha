@@ -1,4 +1,4 @@
-namespace WolframAlphaNET.Objects.Output
+namespace WolframAlphaNet.Objects.Output
 {
     public class ExamplePage
     {

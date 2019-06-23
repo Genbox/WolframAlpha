@@ -1,6 +1,6 @@
 using RestSharp.Deserializers;
 
-namespace WolframAlphaNET.Objects
+namespace WolframAlphaNet.Objects
 {
     public class Value
     {

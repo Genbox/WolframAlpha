@@ -1,7 +1,7 @@
 using RestSharp.Deserializers;
-using WolframAlphaNET.Objects.Output;
+using WolframAlphaNet.Objects.Output;
 
-namespace WolframAlphaNET.Objects
+namespace WolframAlphaNet.Objects
 {
     public class Unit
     {

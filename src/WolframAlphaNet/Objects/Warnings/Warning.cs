@@ -1,4 +1,4 @@
-namespace WolframAlphaNET.Objects.Warnings
+namespace WolframAlphaNet.Objects.Warnings
 {
     public class Warning
     {

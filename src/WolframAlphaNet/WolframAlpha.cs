@@ -5,12 +5,12 @@ using System.Net;
 using GeoCoordinatePortable;
 using RestSharp;
 using RestSharp.Serialization.Xml;
-using WolframAlphaNET.Enums;
-using WolframAlphaNET.Misc;
-using WolframAlphaNET.Objects;
-using Unit = WolframAlphaNET.Enums.Unit;
+using WolframAlphaNet.Enums;
+using WolframAlphaNet.Misc;
+using WolframAlphaNet.Objects;
+using Unit = WolframAlphaNet.Enums.Unit;
 
-namespace WolframAlphaNET
+namespace WolframAlphaNet
 {
     public class WolframAlpha
     {

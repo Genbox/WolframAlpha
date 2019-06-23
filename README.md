@@ -1,5 +1,7 @@
 # Wolfram|Alpha.Net - A full implementation of the 2.0 API
 
+[![NuGet](https://img.shields.io/nuget/v/FindDupes.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/WolframAlphaNet/)
+
 ### Features
 
 * Based on RestSharp (http://restsharp.org) to deserialize the Wolfram|Alpha XML
@@ -15,8 +17,8 @@ First you need to get a Wolfram|Alpha AppID from their website.
    if you don't already have one.
 2. Go to http://developer.wolframalpha.com/portal/myapps/index.html and click "Get an AppID"
 3. Just follow their wizard and then you will have an AppID in the format: XXXXXX-XXXXXXXXXX
-4. Paste the AppID into the `_appId` field inside `WolframAlpha.NET Client` and
-   `WolframAlpha.NET Tests` where it says `"INSERT APPID HERE"`.
+4. Paste the AppID into the `_appId` field inside `WolframAlphaNet.Examples` and
+   `WolframAlphaNet.Tests` where it says `"INSERT APPID HERE"`.
 5. Press F5 to run the client.
 
 ### Examples

@@ -2,17 +2,17 @@
 using System.Linq;
 using System.Threading;
 using GeoCoordinatePortable;
-using WolframAlphaNET.Enums;
-using WolframAlphaNET.Misc;
-using WolframAlphaNET.Objects;
+using WolframAlphaNet.Enums;
+using WolframAlphaNet.Misc;
+using WolframAlphaNet.Objects;
 using Xunit;
-using Unit = WolframAlphaNET.Enums.Unit;
+using Unit = WolframAlphaNet.Enums.Unit;
 
-namespace WolframAlpha.Tests
+namespace WolframAlphaNet.Tests
 {
     public class WolframAlphaTest
     {
-        private readonly string _appId = "YOUR APPID HERE";
+        private const string _appId = "YOUR APPID HERE";
 
         public WolframAlphaTest()
         {
@@ -22,7 +22,7 @@ namespace WolframAlpha.Tests
         [Fact]
         public void WolframAlphaConstructorTest()
         {
-            WolframAlphaNET.WolframAlpha wolfram = new WolframAlphaNET.WolframAlpha(_appId);
+            WolframAlpha wolfram = new WolframAlpha(_appId);
             Assert.NotNull(wolfram.Assumptions);
             Assert.NotNull(wolfram.ExcludePodIDs);
             Assert.NotNull(wolfram.Formats);
@@ -35,7 +35,7 @@ namespace WolframAlpha.Tests
         [Fact]
         public void SearchTest()
         {
-            WolframAlphaNET.WolframAlpha wolframAlpha = new WolframAlphaNET.WolframAlpha(_appId);
+            WolframAlpha wolframAlpha = new WolframAlpha(_appId);
 
             const string expectedPIApproximation = "3.141592653589793238462643383279502884197169399375105820974...";
 
@@ -51,7 +51,7 @@ namespace WolframAlpha.Tests
         [Fact]
         public void ValidateQueryTest()
         {
-            WolframAlphaNET.WolframAlpha wolframAlpha = new WolframAlphaNET.WolframAlpha(_appId);
+            WolframAlpha wolframAlpha = new WolframAlpha(_appId);
             //We put in a lot of parameters
             wolframAlpha.EnableTranslate = true;
             wolframAlpha.MaxWidth = 200;
@@ -84,7 +84,7 @@ namespace WolframAlpha.Tests
         public void EnableTranslateTest()
         {
             //First try without translation
-            WolframAlphaNET.WolframAlpha wolframAlpha = new WolframAlphaNET.WolframAlpha(_appId);
+            WolframAlpha wolframAlpha = new WolframAlpha(_appId);
             wolframAlpha.EnableTranslate = false;
             QueryResult negativeResults = wolframAlpha.Query("uno dos tres");
             Assert.Null(negativeResults.Warnings);

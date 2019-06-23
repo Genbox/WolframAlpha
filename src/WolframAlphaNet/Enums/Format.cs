@@ -1,4 +1,4 @@
-namespace WolframAlphaNET.Enums
+namespace WolframAlphaNet.Enums
 {
     public enum Format
     {

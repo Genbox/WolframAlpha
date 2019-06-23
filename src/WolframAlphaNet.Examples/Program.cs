@@ -1,18 +1,17 @@
 ﻿using System;
-using WolframAlphaNET.Misc;
-using WolframAlphaNET.Objects;
+using WolframAlphaNet.Misc;
+using WolframAlphaNet.Objects;
 
-namespace WolframAlpha.Client
+namespace WolframAlphaNet.Examples
 {
     public class Program
     {
-        //Insert your App ID into the App.config file
-        private static readonly string _appId = "INSERT APPID HERE";
+        private const string _appId = "YOUR APPID HERE";
 
         static void Main(string[] args)
         {
             //Create the Engine.
-            WolframAlphaNET.WolframAlpha wolfram = new WolframAlphaNET.WolframAlpha(_appId);
+            WolframAlpha wolfram = new WolframAlpha(_appId);
             wolfram.ScanTimeout = 0.1f; //We set ScanTimeout really low to get a quick answer. See RecalculateResults() below.
             wolfram.UseTLS = true; //Use encryption
 
@@ -61,8 +60,6 @@ namespace WolframAlpha.Client
                 if (results.Warnings.SpellCheck != null)
                     Console.WriteLine("Spellcheck: " + results.Warnings.SpellCheck.Text);
             }
-
-            Console.ReadLine();
         }
     }
 }

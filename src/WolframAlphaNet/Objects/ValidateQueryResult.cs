@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace WolframAlphaNET.Objects
+namespace WolframAlphaNet.Objects
 {
     public class ValidateQueryResult
     {

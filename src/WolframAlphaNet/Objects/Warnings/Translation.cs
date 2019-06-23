@@ -1,6 +1,6 @@
 using RestSharp.Deserializers;
 
-namespace WolframAlphaNET.Objects.Warnings
+namespace WolframAlphaNet.Objects.Warnings
 {
     public class Translation
     {

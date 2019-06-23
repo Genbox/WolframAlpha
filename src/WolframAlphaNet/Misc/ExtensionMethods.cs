@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WolframAlphaNET.Misc
+namespace WolframAlphaNet.Misc
 {
     public static class ExtensionMethods
     {

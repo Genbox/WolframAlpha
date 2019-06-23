@@ -1,4 +1,4 @@
-namespace WolframAlphaNET.Objects
+namespace WolframAlphaNet.Objects
 {
     public class Tip
     {
