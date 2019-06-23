@@ -1,6 +1,6 @@
 # Wolfram|Alpha.Net - A full implementation of the 2.0 API
 
-[![NuGet](https://img.shields.io/nuget/v/FindDupes.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/WolframAlphaNet/)
+[![NuGet](https://img.shields.io/nuget/v/WolframAlphaNet.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/WolframAlphaNet/)
 
 ### Features
 
