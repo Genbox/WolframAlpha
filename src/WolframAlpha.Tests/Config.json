@@ -1,0 +1,5 @@
+{
+  "AppId": "INSERT APP ID HERE",
+  "UseProxy": false,
+  "Proxy": "http://127.0.0.1:8888"
+}

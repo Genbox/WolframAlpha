@@ -1,4 +1,4 @@
-$tempFolder = .\Temp
+$tempFolder = ".\Temp"
 
 # Delete any old releases
 Remove-Item $tempFolder\* -ErrorAction SilentlyContinue

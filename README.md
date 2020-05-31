@@ -1,57 +1,46 @@
-# Wolfram|Alpha.Net
+# Wolfram|Alpha
 
-[![NuGet](https://img.shields.io/nuget/v/WolframAlphaNet.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/WolframAlphaNet/)
+[![NuGet](https://img.shields.io/nuget/v/Genbox.WolframAlpha.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/Genbox.WolframAlpha/)
 
 ### Features
 
-* Handles Assumptions, different formats, warnings, tips, did you means, timings
-  and more.
+* Support version 2.6 of the full query API
+* Dependency injection friendly
 
-### Tutorial
+### How do I get an AppId?
 
-First you need to get a Wolfram|Alpha AppID from their website.
+First you need to get a Wolfram|Alpha AppId from their website.
 
 1. Go to https://developer.wolframalpha.com/portal/signup.html and create an account
    if you don't already have one.
-2. Go to http://developer.wolframalpha.com/portal/myapps/index.html and click "Get an AppID"
+2. Go to https://developer.wolframalpha.com/portal/myapps/index.html and click "Get an AppID"
 3. Just follow their wizard and then you will have an AppID in the format: XXXXXX-XXXXXXXXXX
-4. Paste the AppID into the `_appId` field inside `WolframAlphaNet.Examples` and
-   `WolframAlphaNet.Tests` where it says `"INSERT APPID HERE"`.
-5. Press F5 to run the client.
 
-### Examples
-
-Here is the simplest form of getting data from Wolfram|Alpha:
+### Example
 
 ```csharp
-static void Main(string[] args)
+static async Task Main(string[] args)
 {
-	//First create the main class:
-	WolframAlpha wolfram = new WolframAlpha("APPID HERE");
+    //Create the client.
+    WolframAlphaClient client = new WolframAlphaClient("YOUR APPID HERE");
 
-	//Then you simply query Wolfram|Alpha like this
-	//Note that the spelling error will be correct by Wolfram|Alpha
-	QueryResult results = wolfram.Query("Who is Danald Duck?");
+    //We start a new query.
+    QueryResponse results = await client.QueryAsync("100 digits of pi").ConfigureAwait(false);
 
-	//The QueryResult object contains the parsed XML from Wolfram|Alpha. Lets look at it.
-	//The results from wolfram is split into "pods". We just print them.
-	if (results != null)
-	{
-		foreach (Pod pod in results.Pods)
-		{
-			Console.WriteLine(pod.Title);
-			if (pod.SubPods != null)
-			{
-				foreach (SubPod subPod in pod.SubPods)
-				{
-					Console.WriteLine(subPod.Title);
-					Console.WriteLine(subPod.Plaintext);
-				}
-			}
-		}
-	}
+    //Results are split into "pods" that contain information.
+    foreach (Pod pod in results.Pods)
+    {
+        Console.WriteLine(pod.Title + ":");
+
+        foreach (SubPod subPod in pod.SubPods)
+        {
+            if (string.IsNullOrEmpty(subPod.Plaintext))
+                Console.WriteLine("<Cannot output in console>");
+            else
+                Console.WriteLine(subPod.Plaintext);
+        }
+
+        Console.WriteLine();
+    }
 }
-
 ```
-
-For more examples, take a look at the WolframAlphaNet.Examples and WolframAlphaNet.Tests projects.

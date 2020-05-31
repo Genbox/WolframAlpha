@@ -3,8 +3,9 @@
   <PropertyGroup>
     <Authors>Ian Qvist</Authors>
     <Copyright>Copyright 2020 © Ian Qvist. All rights reserved.</Copyright>
-    <Description>An implementation of the Wolfram|Alpha 2.0 API</Description>
-    <Version>2.0.0</Version>
+    <Description>An implementation of the Wolfram|Alpha 2.6 API</Description>
+    <PackageTags>WolframAlpha</PackageTags>
+    <Version>3.0.0-alpha1</Version>
 
     <!-- Set copying files etc. to timeout faster -->
     <CopyRetryCount>2</CopyRetryCount>
