@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolframAlphaNet.Tests", "Wo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Imports", "Imports", "{1C7E87AB-0A97-4E3D-97E0-13621BAECBDE}"
 	ProjectSection(SolutionItems) = preProject
-		..\Properties.targets = ..\Properties.targets
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		..\Directory.Build.props = ..\Directory.Build.props
+		..\Global.ruleset = ..\Global.ruleset
+		..\LICENSE.txt = ..\LICENSE.txt
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Global

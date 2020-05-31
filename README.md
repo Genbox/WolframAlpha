@@ -1,11 +1,9 @@
-# Wolfram|Alpha.Net - A full implementation of the 2.0 API
+# Wolfram|Alpha.Net
 
 [![NuGet](https://img.shields.io/nuget/v/WolframAlphaNet.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/WolframAlphaNet/)
 
 ### Features
 
-* Based on RestSharp (http://restsharp.org) to deserialize the Wolfram|Alpha XML
-  into objects
 * Handles Assumptions, different formats, warnings, tips, did you means, timings
   and more.
 
