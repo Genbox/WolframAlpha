@@ -177,10 +177,10 @@ namespace Genbox.WolframAlpha
         }
 
         /// <summary>Queries the full Wolfram|Alpha API.</summary>
-        public Task<QueryResponse> QueryAsync(string query)
+        public Task<QueryResponse> QueryAsync(string query, CancellationToken token = default)
         {
             QueryRequest req = new QueryRequest(query);
-            return QueryAsync(req);
+            return QueryAsync(req, token);
         }
 
         /// <summary>
