@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -40,7 +40,8 @@ namespace Genbox.WolframAlpha
             Initialize();
         }
 
-        public async Task<QueryResponse> QueryAsync(QueryRequest request, CancellationToken token = default)
+        /// <summary>Queries the full Wolfram|Alpha API.</summary>
+        public Task<QueryResponse> QueryAsync(QueryRequest request, CancellationToken token = default)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
@@ -160,13 +161,10 @@ namespace Genbox.WolframAlpha
             if (request.OutputUnit != Unit.Unknown)
                 queryStrings.Add(("units", request.OutputUnit.ToString().ToLowerInvariant()));
 
-            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, "query" + EncodeQueryString(queryStrings)))
-            using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
-            using (Stream httpStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                return _serializer.Deserialize<QueryResponse>(httpStream);
+            return ExecuteRequestAsync<QueryResponse>("query" + EncodeQueryString(queryStrings), token);
         }
 
-        public async Task<ValidateQueryResponse> ValidateQueryAsync(string input, CancellationToken token = default)
+        public Task<ValidateQueryResponse> ValidateQueryAsync(string input, CancellationToken token = default)
         {
             if (string.IsNullOrEmpty(input))
                 throw new ArgumentException("You must supply an input", nameof(input));
@@ -175,20 +173,10 @@ namespace Genbox.WolframAlpha
             queryStrings.Add(("appid", _config.AppId));
             queryStrings.Add(("input", input));
 
-            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, "validatequery" + EncodeQueryString(queryStrings)))
-            using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
-            using (Stream httpStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                return _serializer.Deserialize<ValidateQueryResponse>(httpStream);
+            return ExecuteRequestAsync<ValidateQueryResponse>("validatequery" + EncodeQueryString(queryStrings), token);
         }
 
-        private void Initialize()
-        {
-            if (string.IsNullOrEmpty(_config.AppId))
-                throw new ArgumentException("App Id is required.");
-
-            _httpClient.BaseAddress = new Uri("https://api.wolframalpha.com/v2/");
-        }
-
+        /// <summary>Queries the full Wolfram|Alpha API.</summary>
         public Task<QueryResponse> QueryAsync(string query)
         {
             QueryRequest req = new QueryRequest(query);
@@ -232,6 +220,14 @@ namespace Genbox.WolframAlpha
             }
         }
 
+        private void Initialize()
+        {
+            if (string.IsNullOrEmpty(_config.AppId))
+                throw new ArgumentException("App Id is required.");
+
+            _httpClient.BaseAddress = new Uri("https://api.wolframalpha.com/v2/");
+        }
+
         private static string EncodeQueryString(ICollection<(string, string)> query)
         {
             if (query.Count == 0)
@@ -253,6 +249,14 @@ namespace Genbox.WolframAlpha
             }
 
             return sb.ToString();
+        }
+
+        private async Task<T> ExecuteRequestAsync<T>(string url, CancellationToken token) where T : class
+        {
+            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, url))
+            using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
+            using (Stream httpStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                return _serializer.Deserialize<T>(httpStream);
         }
     }
 }
