@@ -4,7 +4,8 @@
 
 ### Features
 
-* Support version 2.6 of the full query API
+* Support for the [full query API](https://products.wolframalpha.com/api/documentation/)
+* Support for the [simple query API](https://products.wolframalpha.com/simple-api/documentation/)
 * Dependency injection friendly
 
 ### How do I get an AppId?
