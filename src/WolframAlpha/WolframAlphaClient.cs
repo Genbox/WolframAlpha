@@ -216,9 +216,6 @@ namespace Genbox.WolframAlpha
 
         public async Task GetAsyncPodsAsync(QueryResponse result, CancellationToken token = default)
         {
-            if (result.Pods.All(p => p.AsyncUrl == null))
-                return;
-
             for (int i = 0; i < result.Pods.Count; i++)
             {
                 Pod pod = result.Pods[i];
