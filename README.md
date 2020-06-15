@@ -6,6 +6,8 @@
 
 * Support for the [full query API](https://products.wolframalpha.com/api/documentation/)
 * Support for the [simple query API](https://products.wolframalpha.com/simple-api/documentation/)
+* Support for the [validate query API](https://products.wolframalpha.com/api/documentation/#the-validatequery-function)
+* Can recalculate/get async pods
 * Dependency injection friendly
 
 ### How do I get an AppId?
