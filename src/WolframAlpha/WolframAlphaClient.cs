@@ -159,7 +159,7 @@ namespace Genbox.WolframAlpha
             }
 
             if (request.OutputUnit != Unit.Unknown)
-                queryStrings.Add(("units", request.OutputUnit.ToString().ToLowerInvariant()));
+                queryStrings.Add(("units", request.OutputUnit == Unit.Metric ? "metric" : "nonmetric")); //We map manually since the values do not match the enum
 
             return ExecuteRequestAsync<QueryResponse>("query" + EncodeQueryString(queryStrings), token);
         }

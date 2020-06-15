@@ -439,7 +439,7 @@ namespace Genbox.WolframAlpha.Tests
             Pod resultPod = res.Pods.Single(x => x.Title == "Result");
             Assert.Equal("10879 km (kilometers)", resultPod.SubPods[0].Plaintext);
 
-            req.OutputUnit = Unit.NonMetric;
+            req.OutputUnit = Unit.Imperial;
             res = await Client.QueryAsync(req).ConfigureAwait(false);
 
             resultPod = res.Pods.Single(x => x.Title == "Result");

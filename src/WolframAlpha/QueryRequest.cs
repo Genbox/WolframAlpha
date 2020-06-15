@@ -164,7 +164,7 @@ namespace Genbox.WolframAlpha
 
         /// <summary>
         /// Optional; Lets you specify the preferred measurement system, either <see cref="Unit.Metric" /> or
-        /// <see cref="Unit.NonMetric" /> (U.S. customary units). Note: Defaults to making a decision based on the caller's
+        /// <see cref="Unit.Imperial" /> (U.S. customary units). Note: Defaults to making a decision based on the caller's
         /// geographic location.
         /// </summary>
         public Unit OutputUnit { get; set; }

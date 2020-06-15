@@ -4,6 +4,6 @@ namespace Genbox.WolframAlpha.Enums
     {
         Unknown = 0,
         Metric,
-        NonMetric
+        Imperial
     }
 }
