@@ -25,7 +25,7 @@ namespace Genbox.WolframAlpha
 
         //Basic parameters
         /// <summary>The query you want to make to Wolfram|Alpha.</summary>
-        public string Input { get; }
+        public string Input { get; set; }
 
         /// <summary>Optional; Determines the formats of the output Defaults to "plaintext,image"</summary>
         public Format Formats { get; set; }
