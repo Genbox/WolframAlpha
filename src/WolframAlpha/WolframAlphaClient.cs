@@ -229,6 +229,36 @@ namespace Genbox.WolframAlpha
             return SimpleQueryAsync(req, token);
         }
 
+        /// <summary>Queries the Short Answers Wolfram|Alpha API.</summary>
+        public Task<string> ShortAnswerAsync(string input, CancellationToken token = default)
+        {
+            ShortAnswerRequest req = new ShortAnswerRequest(input);
+            return ShortAnswerAsync(req, token);
+        }
+
+        public async Task<string> ShortAnswerAsync(ShortAnswerRequest request, CancellationToken token = default)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            if (string.IsNullOrEmpty(request.Input))
+                throw new ArgumentException("You must supply an input");
+
+            List<(string, string)> queryStrings = new List<(string, string)>();
+            queryStrings.Add(("appid", _config.AppId));
+            queryStrings.Add(("i", request.Input));
+
+            if (request.OutputUnit != Unit.Unknown)
+                queryStrings.Add(("units", request.OutputUnit.ToString().ToLowerInvariant()));
+
+            if (request.Timeout > 0)
+                queryStrings.Add(("timeout", request.Timeout.ToString(NumberFormatInfo.InvariantInfo)));
+
+            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, "result" + EncodeQueryString(queryStrings)))
+            using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
+                return await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+        }
+
         /// <summary>
         /// In case ScanTimeout was set too low, some scanners might have timed out. This method recalculate the query in
         /// such a way that only the timed out scanners return their result.
