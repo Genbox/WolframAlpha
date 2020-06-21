@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Genbox.WolframAlpha.Objects;
 using Genbox.WolframAlpha.Serialization;
 
-namespace Genbox.WolframAlpha
+namespace Genbox.WolframAlpha.Responses
 {
     public class ValidateQueryResponse
     {

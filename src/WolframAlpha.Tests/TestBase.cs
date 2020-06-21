@@ -4,6 +4,7 @@ using Genbox.WolframAlpha.Abstract;
 using Genbox.WolframAlpha.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.ObjectPool;
 
 namespace Genbox.WolframAlpha.Tests
 {
@@ -27,6 +28,7 @@ namespace Genbox.WolframAlpha.Tests
 
             });
 
+            services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
             services.AddSingleton<IXmlSerializer, ReflectedXmlSerializer>();
             services.AddSingleton<WolframAlphaClient>();
             services.AddSingleton(x =>

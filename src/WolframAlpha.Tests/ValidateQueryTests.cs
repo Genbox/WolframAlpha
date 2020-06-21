@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Genbox.WolframAlpha.Objects;
+using Genbox.WolframAlpha.Responses;
 using Xunit;
 
 namespace Genbox.WolframAlpha.Tests

@@ -4,7 +4,7 @@ using System.Net;
 using Genbox.WolframAlpha.Enums;
 using Genbox.WolframAlpha.Objects;
 
-namespace Genbox.WolframAlpha
+namespace Genbox.WolframAlpha.Requests
 {
     public class QueryRequest
     {

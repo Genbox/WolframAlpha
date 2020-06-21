@@ -1,7 +1,7 @@
 ﻿using System;
 using Genbox.WolframAlpha.Enums;
 
-namespace Genbox.WolframAlpha
+namespace Genbox.WolframAlpha.Requests
 {
     public class SimpleQueryRequest
     {

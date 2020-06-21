@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Genbox.WolframAlpha.Enums;
 using Genbox.WolframAlpha.Objects;
+using Genbox.WolframAlpha.Requests;
+using Genbox.WolframAlpha.Responses;
 using Xunit;
 
 namespace Genbox.WolframAlpha.Tests
@@ -16,7 +18,7 @@ namespace Genbox.WolframAlpha.Tests
             QueryRequest req = new QueryRequest("Pi");
             req.Assumptions.Add("*C.Pi-_*Movie-");
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.True(res.IsSuccess);
 
             Pod resultPod = res.Pods.Single(x => x.Title == "Input interpretation");
@@ -30,7 +32,7 @@ namespace Genbox.WolframAlpha.Tests
             req.UseAsync = true;
             req.PodTimeout = 1;
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.True(res.IsSuccess);
 
             Assert.Contains(res.Pods, x => x.AsyncUrl != null);
@@ -43,7 +45,7 @@ namespace Genbox.WolframAlpha.Tests
         [Fact]
         public async Task DelimitersTest()
         {
-            QueryResponse res = await Client.QueryAsync("sin(x").ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync("sin(x").ConfigureAwait(false);
 
             Warning warning = Assert.Single(res.Warnings);
             Assert.Equal("An attempt was made to fix mismatched parentheses, brackets, or braces.", warning.Delimiters.Text);
@@ -52,7 +54,7 @@ namespace Genbox.WolframAlpha.Tests
         [Fact]
         public async Task DidYouMeanTest()
         {
-            QueryResponse resp = await Client.QueryAsync("This is a confusing query it in french").ConfigureAwait(false);
+            QueryResponse resp = await Client.FullQueryAsync("This is a confusing query it in french").ConfigureAwait(false);
             Assert.False(resp.IsSuccess);
             Assert.False(resp.IsError);
 
@@ -83,14 +85,14 @@ namespace Genbox.WolframAlpha.Tests
         [Fact]
         public async Task ErrorTest()
         {
-            Config.AppId = string.Empty;
+            Config.AppId = "AAAAAA-AAAAAAAAAA";
 
-            QueryResponse res = await Client.QueryAsync("does not matter").ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync("does not matter").ConfigureAwait(false);
             Assert.False(res.IsSuccess);
             Assert.True(res.IsError);
 
-            Assert.Equal(2, res.ErrorDetails.Code);
-            Assert.Equal("Appid missing", res.ErrorDetails.Message);
+            Assert.Equal(1, res.ErrorDetails.Code);
+            Assert.Equal("Invalid appid", res.ErrorDetails.Message);
         }
 
         [Fact]
@@ -98,7 +100,7 @@ namespace Genbox.WolframAlpha.Tests
         {
             QueryRequest req = new QueryRequest("electromagnetic wave");
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.Equal("ElectricityAndMagnetism", res.ExamplePage.Category);
             Assert.NotNull(res.ExamplePage.Url);
         }
@@ -111,7 +113,7 @@ namespace Genbox.WolframAlpha.Tests
 
             req.GeoLocation = new GeoCoordinate(40, -19);
 
-            QueryResponse resp = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse resp = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.True(resp.IsSuccess);
             Assert.False(resp.IsError);
             Assert.Equal(12, resp.Pods.Count);
@@ -213,7 +215,7 @@ namespace Genbox.WolframAlpha.Tests
         {
             QueryRequest req = new QueryRequest("Pi");
 
-            QueryResponse resp = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse resp = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.True(resp.IsSuccess);
             Assert.False(resp.IsError);
 
@@ -234,7 +236,7 @@ namespace Genbox.WolframAlpha.Tests
         [Fact]
         public async Task FutureTopicTest()
         {
-            QueryResponse res = await Client.QueryAsync("Microsoft Windows").ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync("Microsoft Windows").ConfigureAwait(false);
             Assert.Equal("Operating Systems", res.FutureTopic.Topic);
             Assert.Equal("Development of this topic is under investigation...", res.FutureTopic.Message);
         }
@@ -244,7 +246,7 @@ namespace Genbox.WolframAlpha.Tests
         {
             QueryRequest req = new QueryRequest("price of copernicium");
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.Equal("copernicium", res.Generalization.Topic);
             Assert.Equal("General results for:", res.Generalization.Description);
             Assert.NotNull(res.Generalization.Url);
@@ -255,7 +257,7 @@ namespace Genbox.WolframAlpha.Tests
         {
             QueryRequest req = new QueryRequest("pi");
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.NotEmpty(res.Pods);
 
             int orgPodCount = res.Pods.Count;
@@ -263,21 +265,21 @@ namespace Genbox.WolframAlpha.Tests
             Pod decApprox = res.Pods.Single(x => x.Title == "Decimal approximation");
             req.IncludePodIds.Add(decApprox.Id);
 
-            res = await Client.QueryAsync(req).ConfigureAwait(false);
+            res = await Client.FullQueryAsync(req).ConfigureAwait(false);
 
             Assert.Single(res.Pods);
 
             req.IncludePodIds.Clear();
             req.ExcludePodIds.Add(decApprox.Id);
 
-            res = await Client.QueryAsync(req).ConfigureAwait(false);
+            res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.Equal(orgPodCount - 1, res.Pods.Count);
         }
 
         [Fact]
         public async Task LanguageMessageTest()
         {
-            QueryResponse res = await Client.QueryAsync("wo noch nie").ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync("wo noch nie").ConfigureAwait(false);
             Assert.Equal("Wolfram|Alpha does not yet support German.", res.LanguageMessage.English);
             Assert.Equal("Wolfram|Alpha versteht noch kein Deutsch.", res.LanguageMessage.Other);
 
@@ -292,7 +294,7 @@ namespace Genbox.WolframAlpha.Tests
             req.PodIndex.Add(1);
             req.PodIndex.Add(2);
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.NotEmpty(res.Pods);
 
             //There is usually 8, we only asked for 2.
@@ -304,7 +306,7 @@ namespace Genbox.WolframAlpha.Tests
         {
             QueryRequest req = new QueryRequest("pi");
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.NotEmpty(res.Pods);
 
             //Get the Decimal approximation pod
@@ -312,7 +314,7 @@ namespace Genbox.WolframAlpha.Tests
             int length = decApprox.SubPods[0].Plaintext.Length;
             req.PodStates.Add(decApprox.States[0].Input);
 
-            res = await Client.QueryAsync(req).ConfigureAwait(false);
+            res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             decApprox = res.Pods.Single(x => x.Title == "Decimal approximation");
             int length2 = decApprox.SubPods[0].Plaintext.Length;
 
@@ -325,7 +327,7 @@ namespace Genbox.WolframAlpha.Tests
             QueryRequest req = new QueryRequest("cantalope duck");
             req.Reinterpret = true;
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.True(res.IsSuccess);
             Assert.False(res.IsError);
 
@@ -349,7 +351,7 @@ namespace Genbox.WolframAlpha.Tests
             QueryRequest req = new QueryRequest("pi");
             req.Scanners.Add("Numeric");
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
 
             //There are 2 scanners with numeric.
             Assert.Equal(2, res.Pods.Count);
@@ -358,7 +360,7 @@ namespace Genbox.WolframAlpha.Tests
         [Fact]
         public async Task SpellCheckTest()
         {
-            QueryResponse res = await Client.QueryAsync("wolframalpa").ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync("wolframalpa").ConfigureAwait(false);
             Assert.True(res.IsSuccess);
             Assert.False(res.IsError);
 
@@ -379,7 +381,7 @@ namespace Genbox.WolframAlpha.Tests
             req.PodTimeout = 8;
             req.FormatTimeout = 9;
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.True(res.IsSuccess);
 
             //Because ScanTimeout is 1, we should get a recalculate url
@@ -396,7 +398,7 @@ namespace Genbox.WolframAlpha.Tests
             QueryRequest req = new QueryRequest("Bonjour Monde");
             req.Translation = true;
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.True(res.IsSuccess);
             Assert.False(res.IsError);
 
@@ -433,14 +435,14 @@ namespace Genbox.WolframAlpha.Tests
             QueryRequest req = new QueryRequest("distance from New York to Tokyo");
             req.OutputUnit = Unit.Metric;
 
-            QueryResponse res = await Client.QueryAsync(req).ConfigureAwait(false);
+            QueryResponse res = await Client.FullQueryAsync(req).ConfigureAwait(false);
             Assert.True(res.IsSuccess);
 
             Pod resultPod = res.Pods.Single(x => x.Title == "Result");
             Assert.Equal("10879 km (kilometers)", resultPod.SubPods[0].Plaintext);
 
             req.OutputUnit = Unit.Imperial;
-            res = await Client.QueryAsync(req).ConfigureAwait(false);
+            res = await Client.FullQueryAsync(req).ConfigureAwait(false);
 
             resultPod = res.Pods.Single(x => x.Title == "Result");
             Assert.Equal("6760 miles", resultPod.SubPods[0].Plaintext);

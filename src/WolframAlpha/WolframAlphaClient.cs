@@ -11,57 +11,83 @@ using System.Web;
 using Genbox.WolframAlpha.Abstract;
 using Genbox.WolframAlpha.Enums;
 using Genbox.WolframAlpha.Extensions;
+using Genbox.WolframAlpha.Misc;
 using Genbox.WolframAlpha.Objects;
+using Genbox.WolframAlpha.Requests;
+using Genbox.WolframAlpha.Responses;
 using Genbox.WolframAlpha.Serialization;
+using Microsoft.Extensions.ObjectPool;
 
 namespace Genbox.WolframAlpha
 {
+    /// <summary>A client to interact with the Wolfram|Alpha APIs</summary>
     public class WolframAlphaClient : IWolframAlphaClient
     {
         private readonly WolframAlphaConfig _config;
         private readonly HttpClient _httpClient;
         private readonly IXmlSerializer _serializer;
+        private readonly ObjectPool<StringBuilder> _sbPool;
+        private readonly ObjectPool<List<(string, string)>> _queryPool;
+        private const string _apiV2 = "https://api.wolframalpha.com/v2/";
 
+        /// <summary>Creates a new instance of the WolframAlphaClient.</summary>
+        /// <param name="appId">The AppId you have obtained from Wolfram|Alpha</param>
         public WolframAlphaClient(string appId)
         {
             _httpClient = new HttpClient();
             _serializer = new ReflectedXmlSerializer();
             _config = new WolframAlphaConfig { AppId = appId };
 
-            Initialize();
+            DefaultObjectPoolProvider objectPoolProvider = new DefaultObjectPoolProvider();
+            _sbPool = objectPoolProvider.CreateStringBuilderPool();
+            _queryPool = objectPoolProvider.Create(new ListPoolPolicy<(string, string)>());
         }
 
-        public WolframAlphaClient(HttpClient client, IXmlSerializer serializer, WolframAlphaConfig config)
+        /// <summary>Creates a new instance of the WolframAlphaClient. You can use this constructor if you want to utilize Dependency Injection.</summary>
+        public WolframAlphaClient(HttpClient client, IXmlSerializer serializer, ObjectPoolProvider poolProvider, WolframAlphaConfig config)
         {
             _httpClient = client;
             _serializer = serializer;
+            _sbPool = poolProvider.CreateStringBuilderPool();
+            _queryPool = poolProvider.Create(new ListPoolPolicy<(string, string)>());
             _config = config;
-
-            Initialize();
         }
 
-        /// <summary>Queries the full Wolfram|Alpha API.</summary>
-        public Task<QueryResponse> QueryAsync(QueryRequest request, CancellationToken token = default)
+        /// <summary>Queries the Full Results API.</summary>
+        public Task<QueryResponse> FullQueryAsync(string input, CancellationToken token = default)
+        {
+            if (string.IsNullOrEmpty(input))
+                throw new ArgumentException("You must supply an input", nameof(input));
+
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("input", input));
+
+            string url = EncodeUrl(_apiV2, "query", query);
+            _queryPool.Return(query);
+
+            return ExecuteRequestAsync<QueryResponse>(url, token);
+        }
+
+        /// <summary>Queries the Full Results API.</summary>
+        public Task<QueryResponse> FullQueryAsync(QueryRequest request, CancellationToken token = default)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
-            if (string.IsNullOrEmpty(request.Input))
-                throw new ArgumentException("You must supply an input");
-
-            List<(string, string)> queryStrings = new List<(string, string)>();
-            queryStrings.Add(("appid", _config.AppId));
-            queryStrings.Add(("input", request.Input));
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("input", request.Input));
 
             if (request.Formats != Format.Unknown)
-                queryStrings.Add(("format", string.Join(",", request.Formats.GetFlags().Select(x => x.ToString().ToLowerInvariant()))));
+                query.Add(("format", string.Join(",", request.Formats.GetFlags().Select(x => x.ToString().ToLowerInvariant()))));
 
             //Pod Selection
             if (request.IncludePodIds.HasElements())
             {
                 foreach (string include in request.IncludePodIds)
                 {
-                    queryStrings.Add(("includepodid", include));
+                    query.Add(("includepodid", include));
                 }
             }
 
@@ -69,7 +95,7 @@ namespace Genbox.WolframAlpha
             {
                 foreach (string exclude in request.ExcludePodIds)
                 {
-                    queryStrings.Add(("excludepodid", exclude));
+                    query.Add(("excludepodid", exclude));
                 }
             }
 
@@ -77,76 +103,76 @@ namespace Genbox.WolframAlpha
             {
                 foreach (string podTitle in request.PodTitles)
                 {
-                    queryStrings.Add(("podtitle", podTitle));
+                    query.Add(("podtitle", podTitle));
                 }
             }
 
             if (request.PodIndex.HasElements())
-                queryStrings.Add(("podindex", string.Join(",", request.PodIndex)));
+                query.Add(("podindex", string.Join(",", request.PodIndex)));
 
             if (request.Scanners.HasElements())
-                queryStrings.Add(("scanner", string.Join(",", request.Scanners)));
+                query.Add(("scanner", string.Join(",", request.Scanners)));
 
             //Location
             if (request.IpAddress != null)
-                queryStrings.Add(("ip", request.IpAddress.ToString()));
+                query.Add(("ip", request.IpAddress.ToString()));
 
             if (!string.IsNullOrEmpty(request.Location))
-                queryStrings.Add(("location", request.Location));
+                query.Add(("location", request.Location));
 
             if (request.GeoLocation != null)
-                queryStrings.Add(("latlong", request.GeoLocation.ToString()));
+                query.Add(("latlong", request.GeoLocation.ToString()));
 
             //Size
             if (request.Width > 0)
-                queryStrings.Add(("width", request.Width.ToString(NumberFormatInfo.InvariantInfo)));
+                query.Add(("width", request.Width.ToString(NumberFormatInfo.InvariantInfo)));
 
             if (request.MaxWidth > 0)
-                queryStrings.Add(("maxwidth", request.MaxWidth.ToString(NumberFormatInfo.InvariantInfo)));
+                query.Add(("maxwidth", request.MaxWidth.ToString(NumberFormatInfo.InvariantInfo)));
 
             if (request.PlotWidth > 0)
-                queryStrings.Add(("plotwidth", request.PlotWidth.ToString(NumberFormatInfo.InvariantInfo)));
+                query.Add(("plotwidth", request.PlotWidth.ToString(NumberFormatInfo.InvariantInfo)));
 
             if (request.Magnification > 0)
-                queryStrings.Add(("mag", request.Magnification.ToString(CultureInfo.InvariantCulture)));
+                query.Add(("mag", request.Magnification.ToString(CultureInfo.InvariantCulture)));
 
             //Timeout/Async
             if (request.ScanTimeout > double.Epsilon)
-                queryStrings.Add(("scantimeout", request.ScanTimeout.ToString(CultureInfo.InvariantCulture)));
+                query.Add(("scantimeout", request.ScanTimeout.ToString(CultureInfo.InvariantCulture)));
 
             if (request.PodTimeout > double.Epsilon)
-                queryStrings.Add(("podtimeout", request.PodTimeout.ToString(CultureInfo.InvariantCulture)));
+                query.Add(("podtimeout", request.PodTimeout.ToString(CultureInfo.InvariantCulture)));
 
             if (request.FormatTimeout > double.Epsilon)
-                queryStrings.Add(("formattimeout", request.FormatTimeout.ToString(CultureInfo.InvariantCulture)));
+                query.Add(("formattimeout", request.FormatTimeout.ToString(CultureInfo.InvariantCulture)));
 
             if (request.ParseTimeout > double.Epsilon)
-                queryStrings.Add(("parsetimeout", request.ParseTimeout.ToString(CultureInfo.InvariantCulture)));
+                query.Add(("parsetimeout", request.ParseTimeout.ToString(CultureInfo.InvariantCulture)));
 
             if (request.TotalTimeout > double.Epsilon)
-                queryStrings.Add(("totaltimeout", request.TotalTimeout.ToString(CultureInfo.InvariantCulture)));
+                query.Add(("totaltimeout", request.TotalTimeout.ToString(CultureInfo.InvariantCulture)));
 
             if (request.UseAsync.HasValue)
-                queryStrings.Add(("async", request.UseAsync.Value.ToString().ToLowerInvariant()));
+                query.Add(("async", request.UseAsync.Value.ToString().ToLowerInvariant()));
 
             //Misc
             if (request.Reinterpret.HasValue)
-                queryStrings.Add(("reinterpret", request.Reinterpret.Value.ToString().ToLowerInvariant()));
+                query.Add(("reinterpret", request.Reinterpret.Value.ToString().ToLowerInvariant()));
 
             if (request.Translation.HasValue)
-                queryStrings.Add(("translation", request.Translation.Value.ToString().ToLowerInvariant()));
+                query.Add(("translation", request.Translation.Value.ToString().ToLowerInvariant()));
 
             if (request.IgnoreCase.HasValue)
-                queryStrings.Add(("ignorecase", request.IgnoreCase.Value.ToString().ToLowerInvariant()));
+                query.Add(("ignorecase", request.IgnoreCase.Value.ToString().ToLowerInvariant()));
 
             if (!string.IsNullOrEmpty(request.Signature))
-                queryStrings.Add(("sig", request.Signature));
+                query.Add(("sig", request.Signature));
 
             if (request.Assumptions.HasElements())
             {
                 foreach (string assumption in request.Assumptions)
                 {
-                    queryStrings.Add(("assumption", assumption));
+                    query.Add(("assumption", assumption));
                 }
             }
 
@@ -154,109 +180,122 @@ namespace Genbox.WolframAlpha
             {
                 foreach (string podState in request.PodStates)
                 {
-                    queryStrings.Add(("podstate", podState));
+                    query.Add(("podstate", podState));
                 }
             }
 
             if (request.OutputUnit != Unit.Unknown)
-                queryStrings.Add(("units", request.OutputUnit == Unit.Metric ? "metric" : "nonmetric")); //We map manually since the values do not match the enum
+                query.Add(("units", request.OutputUnit == Unit.Metric ? "metric" : "nonmetric")); //We map manually since the values do not match the enum
 
-            return ExecuteRequestAsync<QueryResponse>("query" + EncodeQueryString(queryStrings), token);
+            string url = EncodeUrl(_apiV2, "query", query);
+            _queryPool.Return(query);
+
+            return ExecuteRequestAsync<QueryResponse>(url, token);
         }
 
+        /// <summary>Validate a query to see if Wolfram|Alpha has any issues with it.</summary>
         public Task<ValidateQueryResponse> ValidateQueryAsync(string input, CancellationToken token = default)
         {
             if (string.IsNullOrEmpty(input))
                 throw new ArgumentException("You must supply an input", nameof(input));
 
-            List<(string, string)> queryStrings = new List<(string, string)>();
-            queryStrings.Add(("appid", _config.AppId));
-            queryStrings.Add(("input", input));
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("input", input));
 
-            return ExecuteRequestAsync<ValidateQueryResponse>("validatequery" + EncodeQueryString(queryStrings), token);
+            string url = EncodeUrl(_apiV2, "validatequery", query);
+            _queryPool.Return(query);
+
+            return ExecuteRequestAsync<ValidateQueryResponse>(url, token);
         }
 
-        /// <summary>Queries the full Wolfram|Alpha API.</summary>
-        public Task<QueryResponse> QueryAsync(string query, CancellationToken token = default)
-        {
-            QueryRequest req = new QueryRequest(query);
-            return QueryAsync(req, token);
-        }
-
-        /// <summary>Queries the simple Wolfram|Alpha API.</summary>
-        public async Task<byte[]> SimpleQueryAsync(SimpleQueryRequest request, CancellationToken token = default)
-        {
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            if (string.IsNullOrEmpty(request.Input))
-                throw new ArgumentException("You must supply an input");
-
-            List<(string, string)> queryStrings = new List<(string, string)>();
-            queryStrings.Add(("appid", _config.AppId));
-            queryStrings.Add(("i", request.Input));
-
-            if (request.Layout != Layout.Unknown)
-                queryStrings.Add(("format", request.Layout.ToString().ToLowerInvariant()));
-
-            if (request.BackgroundColor != null)
-                queryStrings.Add(("background", request.BackgroundColor));
-
-            if (request.ForegroundColor != null)
-                queryStrings.Add(("foreground", request.ForegroundColor));
-
-            if (request.FontSize > 0)
-                queryStrings.Add(("fontsize", request.FontSize.ToString(NumberFormatInfo.InvariantInfo)));
-
-            if (request.Width > 0)
-                queryStrings.Add(("width", request.Width.ToString(NumberFormatInfo.InvariantInfo)));
-
-            if (request.OutputUnit != Unit.Unknown)
-                queryStrings.Add(("units", request.OutputUnit.ToString().ToLowerInvariant()));
-
-            if (request.Timeout > 0)
-                queryStrings.Add(("timeout", request.Timeout.ToString(NumberFormatInfo.InvariantInfo)));
-
-            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, "simple" + EncodeQueryString(queryStrings)))
-            using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
-                return await httpResponse.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>Queries the simple Wolfram|Alpha API.</summary>
+        /// <summary>Queries the Simple API.</summary>
         public Task<byte[]> SimpleQueryAsync(string input, CancellationToken token = default)
         {
-            SimpleQueryRequest req = new SimpleQueryRequest(input);
-            return SimpleQueryAsync(req, token);
+            if (string.IsNullOrEmpty(input))
+                throw new ArgumentException("You must supply an input", nameof(input));
+
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("i", input));
+
+            string url = EncodeUrl(_apiV2, "simple", query);
+            _queryPool.Return(query);
+            return ExecuteRequestDataAsync(url, token);
         }
 
-        /// <summary>Queries the Short Answers Wolfram|Alpha API.</summary>
-        public Task<string> ShortAnswerAsync(string input, CancellationToken token = default)
-        {
-            ShortAnswerRequest req = new ShortAnswerRequest(input);
-            return ShortAnswerAsync(req, token);
-        }
-
-        public async Task<string> ShortAnswerAsync(ShortAnswerRequest request, CancellationToken token = default)
+        /// <summary>Queries the Simple API.</summary>
+        public Task<byte[]> SimpleQueryAsync(SimpleQueryRequest request, CancellationToken token = default)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
-            if (string.IsNullOrEmpty(request.Input))
-                throw new ArgumentException("You must supply an input");
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("i", request.Input));
 
-            List<(string, string)> queryStrings = new List<(string, string)>();
-            queryStrings.Add(("appid", _config.AppId));
-            queryStrings.Add(("i", request.Input));
+            if (request.Layout != Layout.Unknown)
+                query.Add(("format", request.Layout.ToString().ToLowerInvariant()));
+
+            if (request.BackgroundColor != null)
+                query.Add(("background", request.BackgroundColor));
+
+            if (request.ForegroundColor != null)
+                query.Add(("foreground", request.ForegroundColor));
+
+            if (request.FontSize > 0)
+                query.Add(("fontsize", request.FontSize.ToString(NumberFormatInfo.InvariantInfo)));
+
+            if (request.Width > 0)
+                query.Add(("width", request.Width.ToString(NumberFormatInfo.InvariantInfo)));
 
             if (request.OutputUnit != Unit.Unknown)
-                queryStrings.Add(("units", request.OutputUnit.ToString().ToLowerInvariant()));
+                query.Add(("units", request.OutputUnit.ToString().ToLowerInvariant()));
 
             if (request.Timeout > 0)
-                queryStrings.Add(("timeout", request.Timeout.ToString(NumberFormatInfo.InvariantInfo)));
+                query.Add(("timeout", request.Timeout.ToString(NumberFormatInfo.InvariantInfo)));
 
-            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, "result" + EncodeQueryString(queryStrings)))
-            using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
-                return await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+            string url = EncodeUrl(_apiV2, "simple", query);
+            _queryPool.Return(query);
+            return ExecuteRequestDataAsync(url, token);
+        }
+
+        /// <summary>Queries the Short Answers API.</summary>
+        public Task<string> ShortAnswerAsync(string input, CancellationToken token = default)
+        {
+            if (string.IsNullOrEmpty(input))
+                throw new ArgumentException("You must supply an input", nameof(input));
+
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("i", input));
+
+            string url = EncodeUrl(_apiV2, "result", query);
+            _queryPool.Return(query);
+
+            return ExecuteRequestStringAsync(url, token);
+        }
+
+        /// <summary>Queries the Short Answers API.</summary>
+        public Task<string> ShortAnswerAsync(ShortAnswerRequest request, CancellationToken token = default)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("i", request.Input));
+
+            if (request.OutputUnit != Unit.Unknown)
+                query.Add(("units", request.OutputUnit.ToString().ToLowerInvariant()));
+
+            if (request.Timeout > 0)
+                query.Add(("timeout", request.Timeout.ToString(NumberFormatInfo.InvariantInfo)));
+
+            string url = EncodeUrl(_apiV2, "result", query);
+            _queryPool.Return(query);
+
+            return ExecuteRequestStringAsync(url, token);
         }
 
         /// <summary>
@@ -268,16 +307,12 @@ namespace Genbox.WolframAlpha
             if (response.RecalculateUrl == null || string.IsNullOrEmpty(response.TimedOut))
                 return;
 
-            using (HttpResponseMessage httpResponse = await _httpClient.GetAsync(response.RecalculateUrl, token).ConfigureAwait(false))
-            using (Stream stream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false))
-            {
-                QueryResponse newResponse = _serializer.Deserialize<QueryResponse>(stream);
-
-                response.RecalculateUrl = newResponse.RecalculateUrl;
-                response.TimedOut = newResponse.TimedOut;
-            }
+            QueryResponse newResponse = await ExecuteRequestAsync<QueryResponse>(response.RecalculateUrl.ToString(), token).ConfigureAwait(false);
+            response.RecalculateUrl = newResponse.RecalculateUrl;
+            response.TimedOut = newResponse.TimedOut;
         }
 
+        /// <summary>Updates your <see cref="QueryResponse" /> with pod results that are async.</summary>
         public async Task GetAsyncPodsAsync(QueryResponse result, CancellationToken token = default)
         {
             for (int i = 0; i < result.Pods.Count; i++)
@@ -287,44 +322,31 @@ namespace Genbox.WolframAlpha
                 if (pod.AsyncUrl == null)
                     continue;
 
-                using (HttpResponseMessage httpResponse = await _httpClient.GetAsync(pod.AsyncUrl, token).ConfigureAwait(false))
-                using (Stream stream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                {
-                    Pod newPod = _serializer.Deserialize<Pod>(stream);
-                    result.Pods[i] = newPod;
-                }
+                result.Pods[i] = await ExecuteRequestAsync<Pod>(pod.AsyncUrl.ToString(), token).ConfigureAwait(false);
             }
         }
 
-        private void Initialize()
-        {
-            if (string.IsNullOrEmpty(_config.AppId))
-                throw new ArgumentException("App Id is required.");
-
-            _httpClient.BaseAddress = new Uri("https://api.wolframalpha.com/v2/");
-        }
-
-        private static string EncodeQueryString(ICollection<(string, string)> query)
+        private string EncodeUrl(string baseUrl, string controller, IList<(string, string)> query)
         {
             if (query.Count == 0)
                 return null;
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = _sbPool.Get();
+            sb.Append(baseUrl);
+            sb.Append(controller);
 
-            int count = 0;
-            foreach ((string key, string value) in query)
+            for (int i = 0; i < query.Count; i++)
             {
-                if (count == 0)
-                    sb.Append("?");
-                else
-                    sb.Append("&");
+                (string key, string value) = query[i];
 
-                sb.Append(key + "=" + HttpUtility.UrlEncode(value));
-
-                count++;
+                sb.Append(i == 0 ? '?' : '&');
+                sb.Append(key).Append('=').Append(HttpUtility.UrlEncode(value));
             }
 
-            return sb.ToString();
+            string result = sb.ToString();
+            _sbPool.Return(sb);
+
+            return result;
         }
 
         private async Task<T> ExecuteRequestAsync<T>(string url, CancellationToken token) where T : class
@@ -333,6 +355,20 @@ namespace Genbox.WolframAlpha
             using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
             using (Stream httpStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false))
                 return _serializer.Deserialize<T>(httpStream);
+        }
+
+        private async Task<string> ExecuteRequestStringAsync(string url, CancellationToken token)
+        {
+            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, url))
+            using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
+                return await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+        }
+
+        private async Task<byte[]> ExecuteRequestDataAsync(string url, CancellationToken token)
+        {
+            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, url))
+            using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
+                return await httpResponse.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
         }
     }
 }

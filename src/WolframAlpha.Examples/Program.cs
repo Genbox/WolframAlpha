@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Genbox.WolframAlpha.Enums;
 using Genbox.WolframAlpha.Objects;
+using Genbox.WolframAlpha.Requests;
+using Genbox.WolframAlpha.Responses;
 
 namespace Genbox.WolframAlpha.Examples
 {
@@ -18,7 +20,7 @@ namespace Genbox.WolframAlpha.Examples
             request.Formats = Format.Plaintext;
 
             //We start a new query.
-            QueryResponse results = await client.QueryAsync(request).ConfigureAwait(false);
+            QueryResponse results = await client.FullQueryAsync(request).ConfigureAwait(false);
 
             //Here we output the Wolfram|Alpha results.
             if (results.IsError)

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Genbox.WolframAlpha.Objects;
+using Genbox.WolframAlpha.Responses;
 
 namespace Genbox.WolframAlpha.Extensions
 {

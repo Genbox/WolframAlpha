@@ -1,4 +1,5 @@
-﻿using Genbox.WolframAlpha.Serialization;
+﻿using Genbox.WolframAlpha.Requests;
+using Genbox.WolframAlpha.Serialization;
 
 namespace Genbox.WolframAlpha.Objects
 {

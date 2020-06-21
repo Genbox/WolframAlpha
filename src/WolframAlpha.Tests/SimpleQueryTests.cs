@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Genbox.WolframAlpha.Enums;
+using Genbox.WolframAlpha.Requests;
 using Xunit;
 
 namespace Genbox.WolframAlpha.Tests
