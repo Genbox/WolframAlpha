@@ -7,7 +7,7 @@ namespace Genbox.WolframAlpha.Abstract
 {
     public interface IWolframAlphaClient
     {
-        Task<QueryResponse> FullQueryAsync(QueryRequest request, CancellationToken token = default);
+        Task<FullResultResponse> FullResultAsync(FullResultRequest request, CancellationToken token = default);
         Task<ValidateQueryResponse> ValidateQueryAsync(string input, CancellationToken token = default);
     }
 }

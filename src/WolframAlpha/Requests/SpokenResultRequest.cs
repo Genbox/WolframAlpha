@@ -3,9 +3,9 @@ using Genbox.WolframAlpha.Enums;
 
 namespace Genbox.WolframAlpha.Requests
 {
-    public class SpokenResultsRequest
+    public class SpokenResultRequest
     {
-        public SpokenResultsRequest(string input)
+        public SpokenResultRequest(string input)
         {
             if (string.IsNullOrEmpty(input))
                 throw new ArgumentException("You must supply an input", nameof(input));

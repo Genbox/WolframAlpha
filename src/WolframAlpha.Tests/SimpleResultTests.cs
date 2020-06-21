@@ -6,12 +6,12 @@ using Xunit;
 
 namespace Genbox.WolframAlpha.Tests
 {
-    public class SimpleQueryTests : TestBase
+    public class SimpleResultTests : TestBase
     {
         [Fact]
         public async Task SimpleQueryTest()
         {
-            SimpleQueryRequest req = new SimpleQueryRequest("solar flares");
+            SimpleResultRequest req = new SimpleResultRequest("solar flares");
             req.FontSize = 16;
             req.BackgroundColor = "white";
             req.ForegroundColor = "black";

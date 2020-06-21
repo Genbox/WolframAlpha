@@ -21,7 +21,7 @@ using Microsoft.Extensions.ObjectPool;
 namespace Genbox.WolframAlpha
 {
     /// <summary>A client to interact with the Wolfram|Alpha APIs</summary>
-    public class WolframAlphaClient : IWolframAlphaClient
+    public class WolframAlphaClient : IWolframAlphaClient, IDisposable
     {
         private readonly WolframAlphaConfig _config;
         private readonly HttpClient _httpClient;
@@ -55,7 +55,7 @@ namespace Genbox.WolframAlpha
         }
 
         /// <summary>Queries the Full Results API.</summary>
-        public Task<QueryResponse> FullQueryAsync(string input, CancellationToken token = default)
+        public Task<FullResultResponse> FullResultAsync(string input, CancellationToken token = default)
         {
             if (string.IsNullOrEmpty(input))
                 throw new ArgumentException("You must supply an input", nameof(input));
@@ -67,11 +67,11 @@ namespace Genbox.WolframAlpha
             string url = EncodeUrl(_apiV2, "query", query);
             _queryPool.Return(query);
 
-            return ExecuteRequestAsync<QueryResponse>(url, token);
+            return ExecuteRequestAsync<FullResultResponse>(url, token);
         }
 
         /// <summary>Queries the Full Results API.</summary>
-        public Task<QueryResponse> FullQueryAsync(QueryRequest request, CancellationToken token = default)
+        public Task<FullResultResponse> FullResultAsync(FullResultRequest request, CancellationToken token = default)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
@@ -191,7 +191,7 @@ namespace Genbox.WolframAlpha
             string url = EncodeUrl(_apiV2, "query", query);
             _queryPool.Return(query);
 
-            return ExecuteRequestAsync<QueryResponse>(url, token);
+            return ExecuteRequestAsync<FullResultResponse>(url, token);
         }
 
         /// <summary>Validate a query to see if Wolfram|Alpha has any issues with it.</summary>
@@ -226,7 +226,7 @@ namespace Genbox.WolframAlpha
         }
 
         /// <summary>Queries the Simple API.</summary>
-        public Task<byte[]> SimpleQueryAsync(SimpleQueryRequest request, CancellationToken token = default)
+        public Task<byte[]> SimpleQueryAsync(SimpleResultRequest request, CancellationToken token = default)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
@@ -316,7 +316,7 @@ namespace Genbox.WolframAlpha
         }
 
         /// <summary>Queries the Spoken Results API.</summary>
-        public Task<string> SpokenResultAsync(SpokenResultsRequest request, CancellationToken token = default)
+        public Task<string> SpokenResultAsync(SpokenResultRequest request, CancellationToken token = default)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
@@ -341,18 +341,18 @@ namespace Genbox.WolframAlpha
         /// In case ScanTimeout was set too low, some scanners might have timed out. This method recalculate the query in
         /// such a way that only the timed out scanners return their result.
         /// </summary>
-        public async Task RecalculateAsync(QueryResponse response, CancellationToken token = default)
+        public async Task RecalculateQueryAsync(FullResultResponse response, CancellationToken token = default)
         {
             if (response.RecalculateUrl == null || string.IsNullOrEmpty(response.TimedOut))
                 return;
 
-            QueryResponse newResponse = await ExecuteRequestAsync<QueryResponse>(response.RecalculateUrl.ToString(), token).ConfigureAwait(false);
+            FullResultResponse newResponse = await ExecuteRequestAsync<FullResultResponse>(response.RecalculateUrl.ToString(), token).ConfigureAwait(false);
             response.RecalculateUrl = newResponse.RecalculateUrl;
             response.TimedOut = newResponse.TimedOut;
         }
 
-        /// <summary>Updates your <see cref="QueryResponse" /> with pod results that are async.</summary>
-        public async Task GetAsyncPodsAsync(QueryResponse result, CancellationToken token = default)
+        /// <summary>Updates your <see cref="FullResultResponse" /> with pod results that are async.</summary>
+        public async Task GetAsyncPodsAsync(FullResultResponse result, CancellationToken token = default)
         {
             for (int i = 0; i < result.Pods.Count; i++)
             {
@@ -408,6 +408,12 @@ namespace Genbox.WolframAlpha
             using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, url))
             using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
                 return await httpResponse.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+        }
+
+        public void Dispose()
+        {
+            _httpClient?.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

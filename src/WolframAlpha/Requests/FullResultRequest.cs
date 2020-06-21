@@ -6,9 +6,9 @@ using Genbox.WolframAlpha.Objects;
 
 namespace Genbox.WolframAlpha.Requests
 {
-    public class QueryRequest
+    public class FullResultRequest
     {
-        public QueryRequest(string input)
+        public FullResultRequest(string input)
         {
             if (string.IsNullOrEmpty(input))
                 throw new ArgumentException("You must supply an input", nameof(input));
@@ -94,7 +94,7 @@ namespace Genbox.WolframAlpha.Requests
         /// Optional; Wolfram|Alpha can use an asynchronous mode that allows partial results to come back before all the
         /// pods are computed. The number of pods that comes in the partial request depends on their size and number.
         /// <see cref="PodTimeout" /> gets set to 0.4 if UseAsync is set to true. Use
-        /// <see cref="WolframAlphaClient.RecalculateAsync" /> as a means of getting more partial results.
+        /// <see cref="WolframAlphaClient.RecalculateQueryAsync" /> as a means of getting more partial results.
         /// </summary>
         public bool? UseAsync { get; set; }
 

@@ -12,7 +12,7 @@ namespace Genbox.WolframAlpha.Objects
         public string Description { get; set; }
 
         /// <summary>
-        /// The assumption input. Can be used with <see cref="QueryRequest.Assumptions" /> to make a query with an
+        /// The assumption input. Can be used with <see cref="FullResultRequest.Assumptions" /> to make a query with an
         /// assumption.
         /// </summary>
         public string Input { get; set; }

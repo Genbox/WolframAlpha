@@ -16,11 +16,11 @@ namespace Genbox.WolframAlpha.Examples
             //Create the client.
             WolframAlphaClient client = new WolframAlphaClient(_appId);
 
-            QueryRequest request = new QueryRequest("100 digits of pi");
+            FullResultRequest request = new FullResultRequest("100 digits of pi");
             request.Formats = Format.Plaintext;
 
             //We start a new query.
-            QueryResponse results = await client.FullQueryAsync(request).ConfigureAwait(false);
+            FullResultResponse results = await client.FullResultAsync(request).ConfigureAwait(false);
 
             //Here we output the Wolfram|Alpha results.
             if (results.IsError)

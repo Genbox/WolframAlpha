@@ -10,7 +10,7 @@ namespace Genbox.WolframAlpha.Tests
         [Fact]
         public async Task SpokenResultTest()
         {
-            SpokenResultsRequest req = new SpokenResultsRequest("distance from Copenhagen to Paris?");
+            SpokenResultRequest req = new SpokenResultRequest("distance from Copenhagen to Paris?");
             req.Timeout = 10;
             req.OutputUnit = Unit.Metric;
 

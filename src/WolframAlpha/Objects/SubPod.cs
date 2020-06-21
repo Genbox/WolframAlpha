@@ -26,7 +26,7 @@ namespace Genbox.WolframAlpha.Objects
 
         /// <summary>
         /// Wolfram Language input that can be executed within a Wolfram Language environment to provide the result given
-        /// in a single subpod. Supplied when <see cref="QueryRequest.Formats" /> is set to minput.
+        /// in a single subpod. Supplied when <see cref="FullResultRequest.Formats" /> is set to minput.
         /// </summary>
         public string MInput { get; set; }
 

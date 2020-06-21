@@ -3,9 +3,9 @@ using Genbox.WolframAlpha.Enums;
 
 namespace Genbox.WolframAlpha.Requests
 {
-    public class SimpleQueryRequest
+    public class SimpleResultRequest
     {
-        public SimpleQueryRequest(string input)
+        public SimpleResultRequest(string input)
         {
             if (string.IsNullOrEmpty(input))
                 throw new ArgumentException("You must supply an input", nameof(input));

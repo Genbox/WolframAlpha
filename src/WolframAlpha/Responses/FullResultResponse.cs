@@ -5,7 +5,7 @@ using Genbox.WolframAlpha.Serialization;
 
 namespace Genbox.WolframAlpha.Responses
 {
-    public class QueryResponse
+    public class FullResultResponse
     {
         [SerializeInfo(Name = "languagemsg")]
         public LanguageMessage LanguageMessage { get; set; }
