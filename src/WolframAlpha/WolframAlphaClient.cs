@@ -30,6 +30,8 @@ namespace Genbox.WolframAlpha
         private readonly ObjectPool<List<(string, string)>> _queryPool;
         private const string _apiV1 = "https://api.wolframalpha.com/v1/";
         private const string _apiV2 = "https://api.wolframalpha.com/v2/";
+        private string _queryAnalyzerApi = "https://www.wolframalpha.com/queryrecognizer/";
+        private string _summaryBoxesApi = "https://www.wolframalpha.com/summaryboxes/v1/";
 
         /// <summary>Creates a new instance of the WolframAlphaClient.</summary>
         /// <param name="appId">The AppId you have obtained from Wolfram|Alpha</param>
@@ -335,6 +337,58 @@ namespace Genbox.WolframAlpha
             _queryPool.Return(query);
 
             return ExecuteRequestStringAsync(url, token);
+        }
+
+                /// <summary>Queries the Fast Query Recognizer API.</summary>
+        public Task<FastQueryRecognizerResponse> FastQueryRecognizerAsync(string input, CancellationToken token = default)
+        {
+            if (string.IsNullOrEmpty(input))
+                throw new ArgumentException("You must supply an input", nameof(input));
+
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("i", input));
+            query.Add(("mode", "default"));
+
+            string url = EncodeUrl(_queryAnalyzerApi, "query.jsp", query);
+            _queryPool.Return(query);
+
+            return ExecuteRequestAsync<FastQueryRecognizerResponse>(url, token);
+        }
+
+        /// <summary>Queries the Fast Query Recognizer API.</summary>
+        public Task<FastQueryRecognizerResponse> FastQueryRecognizerAsync(FastQueryRecognizerRequest request, CancellationToken token = default)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("i", request.Input));
+
+            if (request.Mode != QueryRecognizerMode.Unknown)
+                query.Add(("mode", request.Mode.ToString().ToLowerInvariant()));
+
+            string url = EncodeUrl(_queryAnalyzerApi, "query.jsp", query);
+            _queryPool.Return(query);
+
+            return ExecuteRequestAsync<FastQueryRecognizerResponse>(url, token);
+        }
+
+        /// <summary>Queries the Summary Boxes API.</summary>
+        public Task<SummaryBoxesResponse> SummaryBoxAsync(string path, CancellationToken token = default)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentException("You must supply a path", nameof(path));
+
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("path", path));
+
+            string url = EncodeUrl(_summaryBoxesApi, "query", query);
+            _queryPool.Return(query);
+
+            return ExecuteRequestAsync<SummaryBoxesResponse>(url, token);
         }
 
         /// <summary>
