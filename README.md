@@ -4,10 +4,12 @@
 
 ### Features
 
-* Support for the [full query API](https://products.wolframalpha.com/api/documentation/)
-* Support for the [simple query API](https://products.wolframalpha.com/simple-api/documentation/)
-* Support for the [validate query API](https://products.wolframalpha.com/api/documentation/#the-validatequery-function)
-* Can recalculate/get async pods
+* Support for the [Full Results API](https://products.wolframalpha.com/api/documentation/)
+* Support for the [Simple Results API](https://products.wolframalpha.com/simple-api/documentation/)
+* Support for the [Short Answers API](https://products.wolframalpha.com/short-answers-api/documentation/)
+* Support for the [Spoken Results API](https://products.wolframalpha.com/spoken-results-api/documentation/)
+* Full support for [async queries](https://products.wolframalpha.com/api/documentation/#podtimeout-async)
+* Uses object pooling to minimize memory usage
 * Dependency injection friendly
 
 ### How do I get an AppId?
@@ -28,7 +30,7 @@ static async Task Main(string[] args)
     WolframAlphaClient client = new WolframAlphaClient("YOUR APPID HERE");
 
     //We start a new query.
-    QueryResponse results = await client.QueryAsync("100 digits of pi").ConfigureAwait(false);
+    FullResultResponse results = await client.FullResultAsync("100 digits of pi");
 
     //Results are split into "pods" that contain information.
     foreach (Pod pod in results.Pods)
