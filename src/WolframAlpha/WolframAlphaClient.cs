@@ -28,6 +28,7 @@ namespace Genbox.WolframAlpha
         private readonly IXmlSerializer _serializer;
         private readonly ObjectPool<StringBuilder> _sbPool;
         private readonly ObjectPool<List<(string, string)>> _queryPool;
+        private const string _apiV1 = "https://api.wolframalpha.com/v1/";
         private const string _apiV2 = "https://api.wolframalpha.com/v2/";
 
         /// <summary>Creates a new instance of the WolframAlphaClient.</summary>
@@ -293,6 +294,44 @@ namespace Genbox.WolframAlpha
                 query.Add(("timeout", request.Timeout.ToString(NumberFormatInfo.InvariantInfo)));
 
             string url = EncodeUrl(_apiV2, "result", query);
+            _queryPool.Return(query);
+
+            return ExecuteRequestStringAsync(url, token);
+        }
+
+        /// <summary>Queries the Spoken Results API.</summary>
+        public Task<string> SpokenResultAsync(string input, CancellationToken token = default)
+        {
+            if (string.IsNullOrEmpty(input))
+                throw new ArgumentException("You must supply an input", nameof(input));
+
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("i", input));
+
+            string url = EncodeUrl(_apiV1, "spoken", query);
+            _queryPool.Return(query);
+
+            return ExecuteRequestStringAsync(url, token);
+        }
+
+        /// <summary>Queries the Spoken Results API.</summary>
+        public Task<string> SpokenResultAsync(SpokenResultsRequest request, CancellationToken token = default)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            List<(string, string)> query = _queryPool.Get();
+            query.Add(("appid", _config.AppId));
+            query.Add(("i", request.Input));
+
+            if (request.OutputUnit != Unit.Unknown)
+                query.Add(("units", request.OutputUnit.ToString().ToLowerInvariant()));
+
+            if (request.Timeout > 0)
+                query.Add(("timeout", request.Timeout.ToString(NumberFormatInfo.InvariantInfo)));
+
+            string url = EncodeUrl(_apiV1, "spoken", query);
             _queryPool.Return(query);
 
             return ExecuteRequestStringAsync(url, token);
