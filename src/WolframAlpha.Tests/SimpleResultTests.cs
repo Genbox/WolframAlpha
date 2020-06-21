@@ -3,11 +3,14 @@ using System.Threading.Tasks;
 using Genbox.WolframAlpha.Enums;
 using Genbox.WolframAlpha.Requests;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Genbox.WolframAlpha.Tests
 {
     public class SimpleResultTests : TestBase
     {
+        public SimpleResultTests(ITestOutputHelper outputHelper) : base(outputHelper) { }
+
         [Fact]
         public async Task SimpleQueryTest()
         {

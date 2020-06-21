@@ -2,11 +2,14 @@
 using Genbox.WolframAlpha.Enums;
 using Genbox.WolframAlpha.Requests;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Genbox.WolframAlpha.Tests
 {
     public class ShortAnswerTests : TestBase
     {
+        public ShortAnswerTests(ITestOutputHelper outputHelper) : base(outputHelper) { }
+
         [Fact]
         public async Task ShortAnswerTest()
         {

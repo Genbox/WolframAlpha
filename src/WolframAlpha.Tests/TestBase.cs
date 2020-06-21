@@ -4,13 +4,15 @@ using Genbox.WolframAlpha.Abstract;
 using Genbox.WolframAlpha.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
+using Xunit.Abstractions;
 
 namespace Genbox.WolframAlpha.Tests
 {
     public abstract class TestBase
     {
-        protected TestBase()
+        protected TestBase(ITestOutputHelper outputHelper)
         {
             IConfiguration configFile = new ConfigurationBuilder()
                                         .AddJsonFile("Config.json", false)
@@ -26,6 +28,12 @@ namespace Genbox.WolframAlpha.Tests
 
                 return new HttpClient(handler);
 
+            });
+
+            services.AddLogging(x =>
+            {
+                x.SetMinimumLevel(LogLevel.Debug);
+                x.AddXUnit(outputHelper);
             });
 
             services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();

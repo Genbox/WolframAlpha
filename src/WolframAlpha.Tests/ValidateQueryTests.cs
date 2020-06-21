@@ -2,11 +2,14 @@
 using Genbox.WolframAlpha.Objects;
 using Genbox.WolframAlpha.Responses;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Genbox.WolframAlpha.Tests
 {
     public class ValidateQueryTests : TestBase
     {
+        public ValidateQueryTests(ITestOutputHelper outputHelper) : base(outputHelper) { }
+
         [Fact]
         public async Task ValidateQueryTest()
         {

@@ -5,11 +5,14 @@ using Genbox.WolframAlpha.Objects;
 using Genbox.WolframAlpha.Requests;
 using Genbox.WolframAlpha.Responses;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Genbox.WolframAlpha.Tests
 {
     public class FullResultFormatTests : TestBase
     {
+        public FullResultFormatTests(ITestOutputHelper outputHelper) : base(outputHelper) { }
+
         [Fact]
         public async Task HtmlFormatTest()
         {

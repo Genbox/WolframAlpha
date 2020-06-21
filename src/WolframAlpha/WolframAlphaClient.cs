@@ -16,6 +16,8 @@ using Genbox.WolframAlpha.Objects;
 using Genbox.WolframAlpha.Requests;
 using Genbox.WolframAlpha.Responses;
 using Genbox.WolframAlpha.Serialization;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.ObjectPool;
 
 namespace Genbox.WolframAlpha
@@ -26,6 +28,7 @@ namespace Genbox.WolframAlpha
         private readonly WolframAlphaConfig _config;
         private readonly HttpClient _httpClient;
         private readonly IXmlSerializer _serializer;
+        private readonly ILogger<WolframAlphaClient> _logger;
         private readonly ObjectPool<StringBuilder> _sbPool;
         private readonly ObjectPool<List<(string, string)>> _queryPool;
         private const string _apiV1 = "https://api.wolframalpha.com/v1/";
@@ -42,13 +45,15 @@ namespace Genbox.WolframAlpha
             DefaultObjectPoolProvider objectPoolProvider = new DefaultObjectPoolProvider();
             _sbPool = objectPoolProvider.CreateStringBuilderPool();
             _queryPool = objectPoolProvider.Create(new ListPoolPolicy<(string, string)>());
+            _logger = new NullLogger<WolframAlphaClient>();
         }
 
         /// <summary>Creates a new instance of the WolframAlphaClient. You can use this constructor if you want to utilize Dependency Injection.</summary>
-        public WolframAlphaClient(HttpClient client, IXmlSerializer serializer, ObjectPoolProvider poolProvider, WolframAlphaConfig config)
+        public WolframAlphaClient(HttpClient client, IXmlSerializer serializer, ObjectPoolProvider poolProvider, ILogger<WolframAlphaClient> logger, WolframAlphaConfig config)
         {
             _httpClient = client;
             _serializer = serializer;
+            _logger = logger;
             _sbPool = poolProvider.CreateStringBuilderPool();
             _queryPool = poolProvider.Create(new ListPoolPolicy<(string, string)>());
             _config = config;
@@ -390,24 +395,34 @@ namespace Genbox.WolframAlpha
 
         private async Task<T> ExecuteRequestAsync<T>(string url, CancellationToken token) where T : class
         {
-            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, url))
-            using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
+            using (HttpResponseMessage httpResponse = await ExecuteHttpRequestAsync(url, token).ConfigureAwait(false))
             using (Stream httpStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false))
                 return _serializer.Deserialize<T>(httpStream);
         }
 
         private async Task<string> ExecuteRequestStringAsync(string url, CancellationToken token)
         {
-            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, url))
-            using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
+            using (HttpResponseMessage httpResponse = await ExecuteHttpRequestAsync(url, token).ConfigureAwait(false))
                 return await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
         }
 
         private async Task<byte[]> ExecuteRequestDataAsync(string url, CancellationToken token)
         {
-            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, url))
-            using (HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false))
+            using (HttpResponseMessage httpResponse = await ExecuteHttpRequestAsync(url, token).ConfigureAwait(false))
                 return await httpResponse.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+        }
+
+        private async Task<HttpResponseMessage> ExecuteHttpRequestAsync(string url, CancellationToken token)
+        {
+            _logger.LogDebug("Sending request to {Url}", url);
+
+            using (HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, url))
+            {
+                HttpResponseMessage resp = await _httpClient.SendAsync(httpRequest, token).ConfigureAwait(false);
+                long length = resp.Content.Headers.ContentLength ?? -1;
+                _logger.LogDebug("Received status {StatusCode} with {ResponseSize} bytes", resp.StatusCode, length);
+                return resp;
+            }
         }
 
         public void Dispose()
